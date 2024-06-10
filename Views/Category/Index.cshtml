@@ -1,0 +1,258 @@
+﻿@using Smartfarm1.Models
+@using OxyPlot;
+@using OxyPlot.Series;
+
+<!---->
+@model IEnumerable<FarmStatus>
+
+
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+<style>
+    .mycontainer {
+        display: flex;
+    }
+    
+    
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+@ViewBag.FormattedDate
+
+ahihi dongoc
+
+<h1>Index Category</h1>
+<table id="bang" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Display Order</th>
+            <th></th>
+            <th>Time</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        @{
+            ViewBag.ind = 0;
+        }
+        @foreach (var obj in Model)
+        {
+            int i = ViewBag.ind;
+            <tr id=@i>
+                <td width="30%">@obj.CO2</td>
+                <td width="30%">@obj.SoilMoisture</td>
+                <td width="30%">@obj.Light_0x5C</td>
+                <td width="50%">@obj.DateTime.ToString("HH:mm")</td>
+            </tr>
+
+            i++; ViewBag.ind = i;
+            ViewBag.modellast = obj;
+        }
+
+    </tbody>
+</table>
+
+@ViewBag.modellast.CO2
+<p id="modl">a</p>
+<hr style="margin-left:34px; width:800px">
+<table id="tbl" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Display Order</th>
+            <th></th>
+            <th>Time</th>
+        </tr>
+    </thead>
+</table>
+<hr style="margin-left:34px; width:800px">
+
+
+<h2>Chart</h2>
+<div>
+    <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
+    <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>-->
+    <hr style="margin-left:34px; width:800px">
+
+    <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
+    <button type="submit" onclick="getnew()">lấy hết</button>
+
+    <hr style="margin-left:34px; width:800px">
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script type="text/javascript">
+
+    var js = jQuery.noConflict(true);
+    js(document).ready(function() {
+        
+    });
+
+</script>
+
+
+@section Scripts {
+    <script>
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetName")",
+            dataType: "json",
+            success: function (result) {
+                console.log(result.value)
+                console.log(result.value[1])
+            },
+            error: function (req, status, error) {
+                console.log(status)
+            }
+        });
+
+        //
+        let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0}'
+        const obj = JSON.parse(tex);
+        async function getsth() {
+            const d = new Date();
+            let timenow1 = Math.round(d.getTime() / 1000); let timenow2 = Math.round(d.getTime() / 1000);
+
+            while (timenow2 - timenow1 < 5) {
+                const d1 = new Date();
+                timenow2 = Math.round(d1.getTime() / 1000);
+            }
+            console.log("run");
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Getsth")",
+                dataType: "json",
+                success: function (result) {
+                    obj.cO2 = result.value.cO2; obj.dateTime = result.value.dateTime;
+                    obj.id = result.value.id; obj.light_0x5C = result.value.light_0x5C; obj.soilMoisture = result.value.soilMoisture;
+
+                    showdata();
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+
+            return 0;
+        }
+
+        function getnew() {
+            getsth().then(
+                function (value) { console.log(value) },
+                function (error) { console.log("error"); }
+            );
+        }
+        getnew();
+
+        function showdata() {
+            console.log(obj);
+            xValues.shift();
+            yValues0.shift(); yValues1.shift(); yValues2.shift();
+
+            xValues.push(obj.dateTime.toString().slice(11, 16));
+            yValues0.push(obj.cO2); yValues1.push(obj.soilMoisture); yValues2.push(obj.light_0x5C);
+            gigachart();
+            //getnew();
+        }
+        //
+
+        function sochchet() {
+            console.log("đợi tí");
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Sochchet")",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+        const dat = [];
+        const xValues = [];
+        const yValues0 = []; const yValues1 = []; const yValues2 = [];
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Gigachart")",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+               
+                for (var i = 0; i < result.value.length; i++) {
+                    var strdate = result.value[i].dateTime.toString();
+                    xValues.push(strdate.slice(11, 16));
+
+                    yValues0.push(result.value[i].cO2);
+                    yValues1.push(result.value[i].soilMoisture);
+                    yValues2.push(result.value[i].light_0x5C);
+
+                    dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                }
+
+                js('#tbl').DataTable({
+                    data: dat
+                });
+                console.log(xValues); 
+
+                gigachart();
+            },
+            error: function (req, status, error) {
+                console.log(status)
+            }
+        });
+
+
+        function gigachart() {
+           
+            new Chart("GigaChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        data: yValues0,
+                        borderColor: "red",
+                        fill: false
+                    }, {
+                   
+                        data: yValues1,
+                        borderColor: "blue",
+                        fill: false
+                    }, {
+                   
+                        data: yValues2,
+                        borderColor: "green",
+                        fill: false
+                    }]
+                },
+                options: {
+                    legend: { display: false }
+                }
+            });
+        }
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
