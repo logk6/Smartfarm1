@@ -15,6 +15,10 @@
     .mycontainer {
         display: flex;
     }
+
+    .tdbang {
+        width: 30%;
+    }
     
     
 </style>
@@ -23,6 +27,12 @@
 @ViewBag.FormattedDate
 
 ahihi dongoc
+
+<td hidden class="CO2" width="30%"></td>
+<td hidden class="SoilMoisture" width="30%"></td>
+<td hidden class="Light_0x5C" width="30%"></td>
+<td hidden class="DateTime" width="50%"></td>
+
 
 <h1>Index Category</h1>
 <table id="bang" class="table table-bordered table-striped" style="width:100%">
@@ -36,47 +46,38 @@ ahihi dongoc
     </thead>
 
 
-    <tbody>
+    <tbody id="tbang">
         @{
             ViewBag.ind = 0;
         }
         @foreach (var obj in Model)
         {
-            int i = ViewBag.ind;
-            <tr id=@i>
-                <td width="30%">@obj.CO2</td>
-                <td width="30%">@obj.SoilMoisture</td>
-                <td width="30%">@obj.Light_0x5C</td>
-                <td width="50%">@obj.DateTime.ToString("HH:mm")</td>
+            //int i = ViewBag.ind;
+            <tr>
+                <td class="tdbang" width="30%">@obj.CO2</td>
+                <td class="tdbang" width="30%">@obj.SoilMoisture</td>
+                <td class="tdbang" width="30%">@obj.Light_0x5C</td>
+                <td class="tdbang" width="30%">@obj.DateTime.ToString("HH:mm")</td>
             </tr>
 
-            i++; ViewBag.ind = i;
+            //i++; ViewBag.ind = i;
             ViewBag.modellast = obj;
         }
 
     </tbody>
 </table>
 
+
 @ViewBag.modellast.CO2
 <p id="modl">a</p>
 <hr style="margin-left:34px; width:800px">
-<table id="tbl" class="table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Display Order</th>
-            <th></th>
-            <th>Time</th>
-        </tr>
-    </thead>
-</table>
 <hr style="margin-left:34px; width:800px">
 
 
 <h2>Chart</h2>
 <div>
     <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
-    <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>-->
+    <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>
     <hr style="margin-left:34px; width:800px">
 
     <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
@@ -91,16 +92,14 @@ ahihi dongoc
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script type="text/javascript">
 
-    var js = jQuery.noConflict(true);
-    js(document).ready(function() {
-        
-    });
-
 </script>
 
 
 @section Scripts {
     <script>
+
+        datachart();
+        getnew();
 
         $.ajax({
             type: "GET",
@@ -108,7 +107,6 @@ ahihi dongoc
             dataType: "json",
             success: function (result) {
                 console.log(result.value)
-                console.log(result.value[1])
             },
             error: function (req, status, error) {
                 console.log(status)
@@ -152,8 +150,7 @@ ahihi dongoc
                 function (error) { console.log("error"); }
             );
         }
-        getnew();
-
+        
         function showdata() {
             console.log(obj);
             xValues.shift();
@@ -161,7 +158,11 @@ ahihi dongoc
 
             xValues.push(obj.dateTime.toString().slice(11, 16));
             yValues0.push(obj.cO2); yValues1.push(obj.soilMoisture); yValues2.push(obj.light_0x5C);
+
+            
             gigachart();
+            console.log(xValues);
+            gigatabl();
             //getnew();
         }
         //
@@ -185,39 +186,41 @@ ahihi dongoc
         const xValues = [];
         const yValues0 = []; const yValues1 = []; const yValues2 = [];
 
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("Gigachart")",
-            dataType: "json",
-            success: function (result) {
-                console.log(result);
-               
-                for (var i = 0; i < result.value.length; i++) {
-                    var strdate = result.value[i].dateTime.toString();
-                    xValues.push(strdate.slice(11, 16));
+        function datachart() {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Gigachart")",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
 
-                    yValues0.push(result.value[i].cO2);
-                    yValues1.push(result.value[i].soilMoisture);
-                    yValues2.push(result.value[i].light_0x5C);
+                    for (var i = 0; i < result.value.length; i++) {
+                        var strdate = result.value[i].dateTime.toString();
+                        xValues.push(strdate.slice(11, 16));
 
-                    dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                        yValues0.push(result.value[i].cO2);
+                        yValues1.push(result.value[i].soilMoisture);
+                        yValues2.push(result.value[i].light_0x5C);
+
+                        dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                    }
+
+             
+                    console.log(xValues);
+
+                    gigachart();
+                },
+                error: function (req, status, error) {
+                    console.log(status)
                 }
-
-                js('#tbl').DataTable({
-                    data: dat
-                });
-                console.log(xValues); 
-
-                gigachart();
-            },
-            error: function (req, status, error) {
-                console.log(status)
-            }
-        });
+            });
+        }
+        
 
 
         function gigachart() {
-           
+            /**/
+            
             new Chart("GigaChart", {
                 type: "line",
                 data: {
@@ -244,6 +247,16 @@ ahihi dongoc
             });
         }
 
+        function gigatabl(){
+            const td1 = document.createElement("td"); const td2 = document.createElement("td"); const td3 = document.createElement("td"); const td4 = document.createElement("td");
+            td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang"); td4.setAttribute("class", "tdbang");
+            td1.innerHTML = obj.cO2; td2.innerHTML = obj.soilMoisture; td3.innerHTML = obj.light_0x5C; td4.innerHTML = obj.dateTime.toString().slice(11, 16);
+
+            const tr = document.createElement("tr");
+            tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+            document.getElementById("tbang").appendChild(tr);
+
+        }
 
     </script>
 }
