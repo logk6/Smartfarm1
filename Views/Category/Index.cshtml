@@ -19,12 +19,11 @@
     .tdbang {
         width: 30%;
     }
-    
-    
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 @ViewBag.FormattedDate
+
 
 ahihi dongoc
 
@@ -99,20 +98,9 @@ ahihi dongoc
     <script>
 
         datachart();
-        getnew();
-
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("GetName")",
-            dataType: "json",
-            success: function (result) {
-                console.log(result.value)
-            },
-            error: function (req, status, error) {
-                console.log(status)
-            }
-        });
-
+        
+        //getnew();
+       
         //
         let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0}'
         const obj = JSON.parse(tex);
@@ -144,24 +132,23 @@ ahihi dongoc
             return 0;
         }
 
-        function getnew() {
+        async function getnew() {
             getsth().then(
                 function (value) { console.log(value) },
                 function (error) { console.log("error"); }
             );
         }
-        
+
         function showdata() {
-            console.log(obj);
+           
             xValues.shift();
             yValues0.shift(); yValues1.shift(); yValues2.shift();
 
             xValues.push(obj.dateTime.toString().slice(11, 16));
             yValues0.push(obj.cO2); yValues1.push(obj.soilMoisture); yValues2.push(obj.light_0x5C);
 
-            
+
             gigachart();
-            console.log(xValues);
             gigatabl();
             //getnew();
         }
@@ -187,6 +174,7 @@ ahihi dongoc
         const yValues0 = []; const yValues1 = []; const yValues2 = [];
 
         function datachart() {
+    
             $.ajax({
                 type: "GET",
                 url: "@Url.Action("Gigachart")",
@@ -205,9 +193,6 @@ ahihi dongoc
                         dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
                     }
 
-             
-                    console.log(xValues);
-
                     gigachart();
                 },
                 error: function (req, status, error) {
@@ -215,7 +200,6 @@ ahihi dongoc
                 }
             });
         }
-        
 
 
         function gigachart() {
@@ -230,12 +214,12 @@ ahihi dongoc
                         borderColor: "red",
                         fill: false
                     }, {
-                   
+
                         data: yValues1,
                         borderColor: "blue",
                         fill: false
                     }, {
-                   
+
                         data: yValues2,
                         borderColor: "green",
                         fill: false
@@ -245,9 +229,11 @@ ahihi dongoc
                     legend: { display: false }
                 }
             });
+            getnew();
         }
 
-        function gigatabl(){
+        function gigatabl() {
+
             const td1 = document.createElement("td"); const td2 = document.createElement("td"); const td3 = document.createElement("td"); const td4 = document.createElement("td");
             td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang"); td4.setAttribute("class", "tdbang");
             td1.innerHTML = obj.cO2; td2.innerHTML = obj.soilMoisture; td3.innerHTML = obj.light_0x5C; td4.innerHTML = obj.dateTime.toString().slice(11, 16);
