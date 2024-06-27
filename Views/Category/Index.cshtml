@@ -10,7 +10,7 @@
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+
 <style>
     .mycontainer {
         display: flex;
@@ -20,7 +20,7 @@
         width: 30%;
     }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 
 @ViewBag.FormattedDate
 
@@ -88,7 +88,9 @@ ahihi dongoc
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<script type="module" src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.js"></script>
+
 <script type="text/javascript">
 
 </script>
@@ -96,23 +98,14 @@ ahihi dongoc
 
 @section Scripts {
     <script>
-
+        var dade = 0;
         datachart();
-        
+
         //getnew();
-       
         //
         let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0}'
         const obj = JSON.parse(tex);
         async function getsth() {
-            const d = new Date();
-            let timenow1 = Math.round(d.getTime() / 1000); let timenow2 = Math.round(d.getTime() / 1000);
-
-            while (timenow2 - timenow1 < 5) {
-                const d1 = new Date();
-                timenow2 = Math.round(d1.getTime() / 1000);
-            }
-            console.log("run");
 
             $.ajax({
                 type: "GET",
@@ -132,33 +125,42 @@ ahihi dongoc
             return 0;
         }
 
-        async function getnew() {
+        function myFunction() {
+            console.log("ahihi");
+        }
+
+        function getnew() {
+            //setTimeout(getsth, 5000);
             getsth().then(
-                function (value) { console.log(value) },
-                function (error) { console.log("error"); }
+                function (value) { },
+                function (error) { myDisplayer(error); }
             );
         }
 
         function showdata() {
-           
-            xValues.shift();
-            yValues0.shift(); yValues1.shift(); yValues2.shift();
+            //xValues.shift();
+            //yCO2.shift(); ysoilMoisture.shift(); ylight_0x5C.shift();
 
-            xValues.push(obj.dateTime.toString().slice(11, 16));
-            yValues0.push(obj.cO2); yValues1.push(obj.soilMoisture); yValues2.push(obj.light_0x5C);
+            xValues.push(obj.dateTime.toString().slice(11, 16));//
+            yCO2.push(obj.cO2); ysoilMoisture.push(obj.soilMoisture); ylight_0x5C.push(obj.light_0x5C);
 
+            //const myChart = document.getElementById('GigaChart').getContext('2d');
+            myChart.data.datasets[0].data = yCO2; myChart.data.datasets[1].data = ysoilMoisture; myChart.data.datasets[2].data = ylight_0x5C;
+            myChart.data.labels = xValues;
+            myChart.update();
 
-            gigachart();
-            gigatabl();
-            //getnew();
+            
+            //gigatabl();
+            
+            setTimeout(getnew, 5000);
         }
         //
 
-        function sochchet() {
+        async function sochchet() {
             console.log("đợi tí");
             $.ajax({
                 type: "GET",
-                url: "@Url.Action("Sochchet")",
+                url: "@Url.Action("GetName")",
                 dataType: "json",
                 success: function (result) {
                     console.log(result);
@@ -171,10 +173,9 @@ ahihi dongoc
 
         const dat = [];
         const xValues = [];
-        const yValues0 = []; const yValues1 = []; const yValues2 = [];
+        const yCO2 = []; const ysoilMoisture = []; const ylight_0x5C = [];
 
         function datachart() {
-    
             $.ajax({
                 type: "GET",
                 url: "@Url.Action("Gigachart")",
@@ -186,11 +187,11 @@ ahihi dongoc
                         var strdate = result.value[i].dateTime.toString();
                         xValues.push(strdate.slice(11, 16));
 
-                        yValues0.push(result.value[i].cO2);
-                        yValues1.push(result.value[i].soilMoisture);
-                        yValues2.push(result.value[i].light_0x5C);
+                        yCO2.push(result.value[i].cO2);
+                        ysoilMoisture.push(result.value[i].soilMoisture);
+                        ylight_0x5C.push(result.value[i].light_0x5C);
 
-                        dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                        //dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
                     }
 
                     gigachart();
@@ -201,35 +202,43 @@ ahihi dongoc
             });
         }
 
-
+        var myChart;
         function gigachart() {
             /**/
-            
-            new Chart("GigaChart", {
-                type: "line",
+            const ctx = document.getElementById('GigaChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
                 data: {
                     labels: xValues,
                     datasets: [{
-                        data: yValues0,
-                        borderColor: "red",
+                        label: 'CO2',
+                        data: yCO2,
+                        borderColor: 'red',
                         fill: false
                     }, {
-
-                        data: yValues1,
-                        borderColor: "blue",
+                        label: 'SoilMoisture',
+                        data: ysoilMoisture,
+                        borderColor: 'blue',
                         fill: false
                     }, {
-
-                        data: yValues2,
-                        borderColor: "green",
+                        label: 'Light',
+                        data: ylight_0x5C,
+                        borderColor: 'green',
                         fill: false
                     }]
                 },
                 options: {
-                    legend: { display: false }
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
-            getnew();
+
+
+            //getnew();
+            setTimeout(getnew, 5000);
         }
 
         function gigatabl() {

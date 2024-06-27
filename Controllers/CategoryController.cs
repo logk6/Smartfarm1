@@ -30,25 +30,11 @@ namespace Smartfarm1.Controllers
         {
             var date = DateOnly.FromDateTime(DateTime.Now);
             ViewBag.FormattedDate = date.ToString("d"); // Lưu vào ViewBag
-
-
-
             IEnumerable<FarmStatus> objCate = _db.FarmStatus;
 
             return View(objCate);
         }
 
-        public ActionResult FarmChart()
-        {
-            IEnumerable<FarmStatus> arr = _db.FarmStatus;
-            //int s = arr.Count();
-            var plotModel = new FarmChart(arr).MyModel;
-            var stream = new MemoryStream();
-            var exporter = new SvgExporter { Width = 850, Height = 550 };
-            exporter.Export(plotModel, stream);
-            stream.Position = 0;
-            return File(stream, "image/svg+xml");
-        }
 
         [HttpGet]
         public JsonResult GetName()
