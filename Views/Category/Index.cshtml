@@ -1,6 +1,5 @@
 ﻿@using Smartfarm1.Models
-@using OxyPlot;
-@using OxyPlot.Series;
+
 
 <!---->
 @model IEnumerable<FarmStatus>
@@ -19,52 +18,64 @@
     .tdbang {
         width: 30%;
     }
+
+    .ex3 {
+        width: 100%;
+        height: 205px;
+        overflow: auto;
+    }
+
+    .sochet {
+        width: 320px;
+        height: 240px;
+        border: 1px;
+        border-color: red;
+        border-style: groove;
+        position: absolute;
+        left: 1050px;
+        top: 50px;
+        
+    }
 </style>
 
 
 @ViewBag.FormattedDate
-
-
 ahihi dongoc
-
-<td hidden class="CO2" width="30%"></td>
-<td hidden class="SoilMoisture" width="30%"></td>
-<td hidden class="Light_0x5C" width="30%"></td>
-<td hidden class="DateTime" width="50%"></td>
-
-
 <h1>Index Category</h1>
-<table id="bang" class="table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Display Order</th>
-            <th></th>
-            <th>Time</th>
-        </tr>
-    </thead>
 
-
-    <tbody id="tbang">
-        @{
-            ViewBag.ind = 0;
-        }
-        @foreach (var obj in Model)
-        {
-            //int i = ViewBag.ind;
+<div style="width:100%;">
+    <table id="bang" class="table table-bordered table-striped" style="width:100%;">
+        <thead>
             <tr>
-                <td class="tdbang" width="30%">@obj.CO2</td>
-                <td class="tdbang" width="30%">@obj.SoilMoisture</td>
-                <td class="tdbang" width="30%">@obj.Light_0x5C</td>
-                <td class="tdbang" width="30%">@obj.DateTime.ToString("HH:mm")</td>
+                <th class="tdbang" width="30%">Category Name</th>
+                <th class="tdbang" width="30%">Display Order</th>
+                <th class="tdbang" width="30%"></th>
+                <th class="tdbang" width="30%">Time</th>
             </tr>
+        </thead>
+    </table>
+</div>
 
-            //i++; ViewBag.ind = i;
-            ViewBag.modellast = obj;
-        }
+<div style="width:100%; height:240px; overflow-y:auto; scrollbar-width: thin;">
+    <table id="bangbd" class="table table-bordered table-striped" style="width:100%;z-index: -1;">
+        <tbody id="tbang">
+            @foreach (var obj in Model)
+            {
+                //int i = ViewBag.ind;
+                <tr>
+                    <td class="tdbang" width="30%">@obj.CO2</td>
+                    <td class="tdbang" width="30%">@obj.SoilMoisture</td>
+                    <td class="tdbang" width="30%">@obj.Light_0x5C</td>
+                    <td class="tdbang" width="30%">@obj.DateTime.ToString()</td>
+                </tr>
 
-    </tbody>
-</table>
+                ViewBag.modellast = obj;
+            }
+
+        </tbody>
+    </table>
+
+</div>
 
 
 @ViewBag.modellast.CO2
@@ -74,13 +85,35 @@ ahihi dongoc
 
 
 <h2>Chart</h2>
-<div>
+<div style="position:relative">
     <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
     <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>
     <hr style="margin-left:34px; width:800px">
 
     <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
     <button type="submit" onclick="getnew()">lấy hết</button>
+
+
+    <div class="sochet">
+        <p style="text-align:center;">SoilCondition in present</p>
+        <div style="display: flex;">
+            
+            <div style="float: left; width: 50%; margin-left: 10px">
+                <p>CO2</p>
+                <p>SoilMoisture</p>
+                <p>Light</p>
+            </div>
+            <div style="float: left; width: 50%">
+                <p id="co2"></p>
+                <p id="soilmois"></p>
+                <p id="ligh"></p>
+            </div>
+            
+
+        </div>
+        <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
+        <p id="alet"></p>
+    </div>
 
     <hr style="margin-left:34px; width:800px">
 </div>
@@ -138,8 +171,8 @@ ahihi dongoc
         }
 
         function showdata() {
-            //xValues.shift();
-            //yCO2.shift(); ysoilMoisture.shift(); ylight_0x5C.shift();
+            xValues.shift();
+            yCO2.shift(); ysoilMoisture.shift(); ylight_0x5C.shift();
 
             xValues.push(obj.dateTime.toString().slice(11, 16));//
             yCO2.push(obj.cO2); ysoilMoisture.push(obj.soilMoisture); ylight_0x5C.push(obj.light_0x5C);
@@ -149,21 +182,24 @@ ahihi dongoc
             myChart.data.labels = xValues;
             myChart.update();
 
-            
-            //gigatabl();
-            
-            setTimeout(getnew, 5000);
+
+            gigatabl();
+            setTimeout(getnew, 60000);
         }
         //
 
         async function sochchet() {
             console.log("đợi tí");
+            document.getElementById("alet").innerHTML = "wait";
+
             $.ajax({
                 type: "GET",
-                url: "@Url.Action("GetName")",
+                url: "@Url.Action("Sochchet")",
                 dataType: "json",
                 success: function (result) {
                     console.log(result);
+                    document.getElementById("co2").innerHTML = result.value.cO2; document.getElementById("soilmois").innerHTML = result.value.soilMoisture; document.getElementById("ligh").innerHTML = result.value.light_0x5C;
+                    document.getElementById("alet").innerHTML = "";
                 },
                 error: function (req, status, error) {
                     console.log(status)
@@ -171,7 +207,7 @@ ahihi dongoc
             });
         }
 
-        const dat = [];
+        //const dat = [];
         const xValues = [];
         const yCO2 = []; const ysoilMoisture = []; const ylight_0x5C = [];
 
@@ -181,18 +217,34 @@ ahihi dongoc
                 url: "@Url.Action("Gigachart")",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result);
+                    //console.log(result);
+                    if (result.value.length > 10) {
+                        const dat = result.value.slice(result.value.length - 10, result.value.length);
 
-                    for (var i = 0; i < result.value.length; i++) {
-                        var strdate = result.value[i].dateTime.toString();
-                        xValues.push(strdate.slice(11, 16));
+                        for (var i = 0; i < dat.length; i++) {
+                            var strdate = dat[i].dateTime.toString();
+                            xValues.push(strdate.slice(11, 16));
 
-                        yCO2.push(result.value[i].cO2);
-                        ysoilMoisture.push(result.value[i].soilMoisture);
-                        ylight_0x5C.push(result.value[i].light_0x5C);
+                            yCO2.push(dat[i].cO2);
+                            ysoilMoisture.push(dat[i].soilMoisture);
+                            ylight_0x5C.push(dat[i].light_0x5C);
 
-                        //dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                        }
                     }
+                    else {
+                        for (var i = 0; i < result.value.length; i++) {
+                            var strdate = result.value[i].dateTime.toString();
+                            xValues.push(strdate.slice(11, 16));
+
+                            yCO2.push(result.value[i].cO2);
+                            ysoilMoisture.push(result.value[i].soilMoisture);
+                            ylight_0x5C.push(result.value[i].light_0x5C);
+
+                            //dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
+                        }
+                    }
+
+                    
 
                     gigachart();
                 },
@@ -211,17 +263,17 @@ ahihi dongoc
                 data: {
                     labels: xValues,
                     datasets: [{
-                        label: 'CO2',
+                        label: 'CO2(ppm - mg/l)',
                         data: yCO2,
                         borderColor: 'red',
                         fill: false
                     }, {
-                        label: 'SoilMoisture',
+                        label: 'SoilMoisture(g/m^3)',
                         data: ysoilMoisture,
                         borderColor: 'blue',
                         fill: false
                     }, {
-                        label: 'Light',
+                        label: 'Light(lx)',
                         data: ylight_0x5C,
                         borderColor: 'green',
                         fill: false
@@ -238,7 +290,7 @@ ahihi dongoc
 
 
             //getnew();
-            setTimeout(getnew, 5000);
+            setTimeout(getnew, 60000);
         }
 
         function gigatabl() {

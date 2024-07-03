@@ -31,6 +31,7 @@ namespace Smartfarm1.Controllers
             var date = DateOnly.FromDateTime(DateTime.Now);
             ViewBag.FormattedDate = date.ToString("d"); // Lưu vào ViewBag
             IEnumerable<FarmStatus> objCate = _db.FarmStatus;
+            objCate = objCate.OrderBy(obj => obj.Id);
 
             return View(objCate);
         }
@@ -53,7 +54,7 @@ namespace Smartfarm1.Controllers
         [HttpGet]
         public JsonResult Sochchet()
         {//10.10.12.194 172.31.99.167
-            string ip = "172.31.98.6";
+            string ip = "172.31.99.167";
             IPAddress ipAddr = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
 
@@ -83,6 +84,8 @@ namespace Smartfarm1.Controllers
         {
             IEnumerable<FarmStatus> objCate = _db.FarmStatus;
             ViewBag.modelcount = objCate.Count() - 1;
+            objCate = objCate.OrderBy(obj => obj.Id);
+
             FarmStatus va = new FarmStatus();
             foreach (FarmStatus obj in objCate)
             {
@@ -96,8 +99,9 @@ namespace Smartfarm1.Controllers
         [HttpGet]
         public JsonResult Gigachart()
         {
-            IEnumerable<FarmStatus> objCate = _db.FarmStatus;
-            
+            IEnumerable<FarmStatus> objCate = _db.FarmStatus;//pets.OrderBy(pet => pet.Age);
+            objCate = objCate.OrderBy(obj => obj.Id);
+
             ViewBag.modcount = objCate.Count();
             return new JsonResult(Ok(objCate));
 
