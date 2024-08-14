@@ -1,0 +1,82 @@
+﻿@using Smartfarm1.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+
+
+
+<hr style="margin-left:34px; width:800px">
+<table id="tbl" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>a</th>
+            <th>b</th>
+            <th>c</th>
+            <th>d</th>
+            <th>d</th>
+            <th>d</th>
+        </tr>
+    </thead>
+</table>
+<hr style="margin-left:34px; width:800px">
+
+
+
+<script type="text/javascript">
+    var data = [
+        [
+            "Tiger Nixon",
+            "System Architect",
+            "Edinburgh",
+            "5421",
+            "2011/04/25",
+            "$3,120"
+        ],
+        [
+            "Garrett Winters",
+            "Director",
+            "Edinburgh",
+            "8422",
+            "2011/07/25",
+            "$5,300"
+        ]
+    ]
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+
+    });
+
+    
+</script>
+
+
+
+@section Scripts {
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetUsr")",
+            dataType: "json",
+            success: function (result) {
+                //js('#tbl').DataTable({
+                    //data: result
+                //});
+                console.log(result);
+            },
+            error: function (req, status, error) {
+                console.log(status)
+            }
+        });
+
+      
+
+    </script>
+
+}

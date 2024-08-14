@@ -16,7 +16,7 @@
     }
 
     .tdbang {
-        width: 30%;
+        width: 10%;
     }
 
     .ex3 {
@@ -27,19 +27,17 @@
 
     .sochet {
         width: 320px;
-        height: 240px;
         border: 1px;
         border-color: red;
         border-style: groove;
         position: absolute;
         left: 1050px;
         top: 50px;
-        
     }
 </style>
 
 
-@ViewBag.FormattedDate
+
 ahihi dongoc
 <h1>Index Category</h1>
 
@@ -47,10 +45,12 @@ ahihi dongoc
     <table id="bang" class="table table-bordered table-striped" style="width:100%;">
         <thead>
             <tr>
-                <th class="tdbang" width="30%">Category Name</th>
-                <th class="tdbang" width="30%">Display Order</th>
-                <th class="tdbang" width="30%"></th>
-                <th class="tdbang" width="30%">Time</th>
+                <th class="tdbang" width="10%">CO2</th>
+                <th class="tdbang" width="10%">SoilMoisture</th>
+                <th class="tdbang" width="10%">Light_0x5C</th>
+                <th class="tdbang" width="10%">Humidity</th>
+                <th class="tdbang" width="10%">Temperature</th>
+                <th class="tdbang" width="25%">DateTime</th>
             </tr>
         </thead>
     </table>
@@ -63,80 +63,127 @@ ahihi dongoc
             {
                 //int i = ViewBag.ind;
                 <tr>
-                    <td class="tdbang" width="30%">@obj.CO2</td>
-                    <td class="tdbang" width="30%">@obj.SoilMoisture</td>
-                    <td class="tdbang" width="30%">@obj.Light_0x5C</td>
-                    <td class="tdbang" width="30%">@obj.DateTime.ToString()</td>
+                    <td class="tdbang" width="10%">@obj.CO2.ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.SoilMoisture).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Light_0x5C).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Humidity).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Temperature).ToString()</td>
+                    <td class="tdbang" width="50%">@obj.DateTime.ToString()</td>
                 </tr>
 
-                ViewBag.modellast = obj;
+                //ViewBag.modellast = obj;
             }
 
         </tbody>
     </table>
-
 </div>
 
 
-@ViewBag.modellast.CO2
+
 <p id="modl">a</p>
 <hr style="margin-left:34px; width:800px">
 <hr style="margin-left:34px; width:800px">
 
+<!--
+<table id="tbl" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Display Order</th>
+            <th></th>
+            <th>Time</th>
+        </tr>
+    </thead>
+</table>
+-->
+<hr style="margin-left:34px; width:800px">
 
 <h2>Chart</h2>
 <div style="position:relative">
     <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
     <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>
     <hr style="margin-left:34px; width:800px">
+    <hr style="margin-left:34px; width:800px">
+    <canvas id="GigaChart2" style="width:100%;max-width:1000px"></canvas>
 
-    <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
+    <hr style="margin-left:34px; width:800px">
+    <input id="dkhien" type="text" placeholder="dkhien" />
+    <button type="submit" onclick="dkhien()">dieu khien</button>
     <button type="submit" onclick="getnew()">lấy hết</button>
 
 
     <div class="sochet">
         <p style="text-align:center;">SoilCondition in present</p>
         <div style="display: flex;">
-            
+
             <div style="float: left; width: 50%; margin-left: 10px">
                 <p>CO2</p>
                 <p>SoilMoisture</p>
                 <p>Light</p>
+                <p>Humidity</p>
+                <p>Temperature</p>
             </div>
             <div style="float: left; width: 50%">
                 <p id="co2"></p>
                 <p id="soilmois"></p>
                 <p id="ligh"></p>
+                <p id="humi"></p>
+                <p id="temp"></p>
             </div>
-            
 
         </div>
         <button type="submit" onclick="sochchet()">lấy dữ liệu hiện tại</button>
         <p id="alet"></p>
     </div>
-
     <hr style="margin-left:34px; width:800px">
 </div>
 
 
 
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.js"></script>
 
-<script type="text/javascript">
 
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
+
+
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+
+    });
 </script>
 
 
 @section Scripts {
     <script>
+        function dkhien() {
+            var dk = document.getElementById("dkhien").innerHTML;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")",
+                dataType: "json",
+                data: {cm: dk},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+
         var dade = 0;
         datachart();
 
         //getnew();
         //
-        let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0}'
+        let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0, "temperature": 0, "humidity": 0}'
         const obj = JSON.parse(tex);
         async function getsth() {
 
@@ -147,6 +194,7 @@ ahihi dongoc
                 success: function (result) {
                     obj.cO2 = result.value.cO2; obj.dateTime = result.value.dateTime;
                     obj.id = result.value.id; obj.light_0x5C = result.value.light_0x5C; obj.soilMoisture = result.value.soilMoisture;
+                    obj.temperature = result.value.temperature; obj.humidity = result.value.humidity;
 
                     showdata();
                 },
@@ -156,10 +204,6 @@ ahihi dongoc
             });
 
             return 0;
-        }
-
-        function myFunction() {
-            console.log("ahihi");
         }
 
         function getnew() {
@@ -196,20 +240,23 @@ ahihi dongoc
                 type: "GET",
                 url: "@Url.Action("Sochchet")",
                 dataType: "json",
+                
                 success: function (result) {
-                    console.log(result);
+                    /*console.log(result);
                     document.getElementById("co2").innerHTML = result.value.cO2; document.getElementById("soilmois").innerHTML = result.value.soilMoisture; document.getElementById("ligh").innerHTML = result.value.light_0x5C;
-                    document.getElementById("alet").innerHTML = "";
+                    */document.getElementById("alet").innerHTML = result.value;
+
                 },
                 error: function (req, status, error) {
                     console.log(status)
+                    document.getElementById("alet").innerHTML = status;
                 }
             });
         }
 
         //const dat = [];
         const xValues = [];
-        const yCO2 = []; const ysoilMoisture = []; const ylight_0x5C = [];
+        const yCO2 = []; const ysoilMoisture = []; const ylight_0x5C = []; const ytemp = []; const yhumi = [];
 
         function datachart() {
             $.ajax({
@@ -228,6 +275,8 @@ ahihi dongoc
                             yCO2.push(dat[i].cO2);
                             ysoilMoisture.push(dat[i].soilMoisture);
                             ylight_0x5C.push(dat[i].light_0x5C);
+                            ytemp.push(dat[i].temperature);
+                            yhumi.push(dat[i].humidity);
 
                         }
                     }
@@ -239,12 +288,16 @@ ahihi dongoc
                             yCO2.push(result.value[i].cO2);
                             ysoilMoisture.push(result.value[i].soilMoisture);
                             ylight_0x5C.push(result.value[i].light_0x5C);
+                            ytemp.push(result.value[i].temperature);
+                            yhumi.push(result.value[i].humidity);
 
-                            //dat.push([result.value[i].cO2, result.value[i].soilMoisture, result.value[i].light_0x5C, result.value[i].dateTime.toString()]);
                         }
                     }
 
-                    
+                    //js('#tbl').DataTable({
+                        //data: result
+                    //});
+                    console.log(xValues);
 
                     gigachart();
                 },
@@ -254,7 +307,7 @@ ahihi dongoc
             });
         }
 
-        var myChart;
+        var myChart, myChart2; var Chartchart;
         function gigachart() {
             /**/
             const ctx = document.getElementById('GigaChart').getContext('2d');
@@ -272,6 +325,33 @@ ahihi dongoc
                         data: ysoilMoisture,
                         borderColor: 'blue',
                         fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+
+            const ctx2 = document.getElementById('GigaChart2').getContext('2d');
+            myChart2 = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'Humid(%)',
+                        data: yhumi,
+                        borderColor: 'red',
+                        fill: false
+                    }, {
+                        label: 'Temper(℃)',
+                        data: ytemp,
+                        borderColor: 'blue',
+                        fill: false
                     }, {
                         label: 'Light(lx)',
                         data: ylight_0x5C,
@@ -287,20 +367,24 @@ ahihi dongoc
                     }
                 }
             });
-
-
             //getnew();
             setTimeout(getnew, 60000);
         }
 
         function gigatabl() {
 
-            const td1 = document.createElement("td"); const td2 = document.createElement("td"); const td3 = document.createElement("td"); const td4 = document.createElement("td");
-            td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang"); td4.setAttribute("class", "tdbang");
-            td1.innerHTML = obj.cO2; td2.innerHTML = obj.soilMoisture; td3.innerHTML = obj.light_0x5C; td4.innerHTML = obj.dateTime.toString().slice(11, 16);
+            const td1 = document.createElement("td"); const td2 = document.createElement("td"); const td3 = document.createElement("td");
+            const td4 = document.createElement("td"); const td5 = document.createElement("td"); const td6 = document.createElement("td");
+
+            td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang"); 
+            td4.setAttribute("class", "tdbang"); td5.setAttribute("class", "tdbang"); td6.setAttribute("class", "tdbang");
+
+            td1.innerHTML = obj.cO2; td2.innerHTML = obj.soilMoisture; td3.innerHTML = obj.light_0x5C;
+            td4.innerHTML = obj.humidity//.slice(11, 16);
+            td5.innerHTML = obj.temperature; td2.innerHTML = obj.dateTime;
 
             const tr = document.createElement("tr");
-            tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+            tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4); tr.appendChild(td5); tr.appendChild(td6);
             document.getElementById("tbang").appendChild(tr);
 
         }

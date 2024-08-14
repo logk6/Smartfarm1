@@ -22,7 +22,7 @@ namespace Smartfarm1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("mvcTest1.Models.FarmStatus", b =>
+            modelBuilder.Entity("Smartfarm1.Models.FarmStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,11 +36,17 @@ namespace Smartfarm1.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<float>("Humidity")
+                        .HasColumnType("real");
+
                     b.Property<int>("Light_0x5C")
                         .HasColumnType("int");
 
                     b.Property<int>("SoilMoisture")
                         .HasColumnType("int");
+
+                    b.Property<float>("Temperature")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

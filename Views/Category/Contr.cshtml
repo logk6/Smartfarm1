@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<input id="dkhien" type="text" placeholder="dkhien" />
+<button type="submit" onclick="dkhien()">dieu khien</button>
+
+
+
+@section Scripts {
+    <script>
+        function dkhien() {
+            console.log("wait");
+            var dk = document.getElementById("dkhien").value;
+            let tex = '{"cm": 0}'
+            const obj = JSON.parse(tex); obj.cm = dk;
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+      
+    </script>
+}

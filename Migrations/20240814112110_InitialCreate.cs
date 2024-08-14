@@ -20,7 +20,9 @@ namespace Smartfarm1.Migrations
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CO2 = table.Column<int>(type: "int", nullable: false),
                     SoilMoisture = table.Column<int>(type: "int", nullable: false),
-                    Light_0x5C = table.Column<int>(type: "int", nullable: false)
+                    Light_0x5C = table.Column<int>(type: "int", nullable: false),
+                    Humidity = table.Column<float>(type: "real", nullable: false),
+                    Temperature = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
