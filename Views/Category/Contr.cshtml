@@ -3,18 +3,158 @@
 *@
 @{
 }
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 36px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+         position: absolute;
+         content: "";
+         height: 12px;
+         width: 12px;
+         left: 4px;
+         bottom: 4px;
+         background-color: white;
+         -webkit-transition: .4s;
+         transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(12px);
+        -ms-transform: translateX(12px);
+        transform: translateX(16px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 20px;
+    }
+
+    .slider.round:before {
+            border-radius: 50%;
+    }
+
+    .visi1 {
+        visibility: visible;
+    }
+
+    .visi2 {
+        visibility: hidden;
+    }
+</style>
+
+<p>
+    <label>Fan</label>
+    <label class="switch">
+        <input id="fan" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+</p>
+<br />
+
+<p>
+    <label>Window</label>
+    <label class="switch">
+        <input id="window" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+</p>
+<br />
+
+<p>
+    <label>Led</label>
+    <label class="switch">
+        <input id="led" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+    <input id="colorled" type="color" class="visi2" name="colour" />
+</p>
+
+<table class="table table-bordered table-striped" style="width:50%;">
+    <thead>
+        <tr>
+            <th width="10%"></th>
+            <th width="10%">Hue</th>
+            <th width="10%">Hex</th>
+            <th width="10%">Rgb</th>
+            <th width="10%">Hsl</th>
+
+        </tr>
+    </thead>
+
+    <tbody id="tbang">
+        <tr>
+            <td height="10px" width="10%" style="cursor:pointer;background-color:#ff0000"></td>
+            <td height="10px" width="10%">0</td>
+            <td height="10px" width="10%">#ff0000</td>
+            <td height="10px" width="10%">rgb(255, 0, 0)</td>
+            <td height="10px" width="10%">hsl(0, 100%, 50%)</td>
+        </tr>
+        <tr>
+            <td height="10px" width="10%" style="cursor:pointer;background-color:rgb(255, 0, 255)"></td>
+            <td height="10px" width="10%">0</td>
+            <td height="10px" width="10%">#ff0000</td>
+            <td height="10px" width="10%">rgb(255, 0, 0)</td>
+            <td height="10px" width="10%">hsl(0, 100%, 50%)</td>
+        </tr>
+
+    </tbody>
+</table>
+
 <input id="dkhien" type="text" placeholder="dkhien" />
-<button type="submit" onclick="dkhien()">dieu khien</button>
+<button type="submit" onclick="dkhiencmd()">dieu khien</button>
+
+
+
+<script>
+    //const led = false;
+    
+
+</script>
 
 
 
 @section Scripts {
     <script>
-        function dkhien() {
+        function dkhiencmd() {
             console.log("wait");
             var dk = document.getElementById("dkhien").value;
-            let tex = '{"cm": 0}'
-            const obj = JSON.parse(tex); obj.cm = dk;
+            let tex = '{"mess": "a"}'
+            const obj = JSON.parse(tex); obj.mess = dk;
+            console.log(obj);
 
             $.ajax({
                 type: "POST",
@@ -30,6 +170,93 @@
             });
         }
 
-      
+        function dkhienbtn(cmd) {
+            console.log("wait");
+            let tex = '{"mess": "a"}'
+            const obj = JSON.parse(tex); obj.mess = cmd;
+            //console.log(obj);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+        document.getElementById('fan').addEventListener('change', function () {
+            var fan = document.getElementById('fan');
+            if (fan.checked) {
+                dkhienbtn("fanon")
+                //console.log("fanon");
+            } else {
+                dkhienbtn("fanoff")
+                //console.log("fanoff");
+            }
+        });
+
+        document.getElementById('window').addEventListener('change', function () {
+            var window = document.getElementById('window');
+            if (window.checked) {
+                dkhienbtn("windopn")
+                //console.log("windowon");
+            } else {
+                dkhienbtn("windclos")
+                //console.log("windowoff");
+            }
+        });
+
+        document.getElementById('colorled').addEventListener('change', function (event) {
+            var led = document.getElementById('colorled');
+            const color = event.target.value
+            const r = parseInt(color.substr(1, 2), 16)
+            const g = parseInt(color.substr(3, 2), 16)
+            const b = parseInt(color.substr(5, 2), 16)
+            //console.log(`red: ${r}, green: ${g}, blue: ${b}`)
+            chinhmau("ledon" ,r, g, b);
+            //console.log([r, g, b])
+
+        });
+
+        document.getElementById('led').addEventListener('change', function () {
+            var led = document.getElementById('led');
+            var ledcolor = document.getElementById("colorled");
+
+            if (led.checked) {
+                //dkhienbtn("windopn")
+                ledcolor.setAttribute("class", "visi1"); //setAttribute("class", "democlass");
+            } else {
+                //dkhienbtn("windclos")
+                ledcolor.setAttribute("class", "visi2");
+                chinhmau("ledoff", 0, 0, 0);
+            }
+        });
+
+        function chinhmau(mess ,r, g, b){
+            console.log("wait");
+            let tex = '{"mess": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0}';
+            const obj = JSON.parse(tex);
+            obj.mess = mess; obj.rgb1 = r; obj.rgb2 = g; obj.rgb3 = b;
+            
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Chinhmau")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
     </script>
 }

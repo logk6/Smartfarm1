@@ -222,10 +222,12 @@ ahihi dongoc
             yCO2.push(obj.cO2); ysoilMoisture.push(obj.soilMoisture); ylight_0x5C.push(obj.light_0x5C);
 
             //const myChart = document.getElementById('GigaChart').getContext('2d');
-            myChart.data.datasets[0].data = yCO2; myChart.data.datasets[1].data = ysoilMoisture; myChart.data.datasets[2].data = ylight_0x5C;
-            myChart.data.labels = xValues;
-            myChart.update();
+            myChart.data.datasets[0].data = yCO2; myChart.data.datasets[1].data = ysoilMoisture;
+            myChart2.data.datasets[0].data = yhumi; myChart2.data.datasets[1].data = ytemp; myChart2.data.datasets[2].data = ylight_0x5C;
 
+            myChart.data.labels = xValues; myChart.update();
+            myChart2.data.labels = xValues; myChart2.update();
+            
 
             gigatabl();
             setTimeout(getnew, 60000);
@@ -379,9 +381,9 @@ ahihi dongoc
             td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang"); 
             td4.setAttribute("class", "tdbang"); td5.setAttribute("class", "tdbang"); td6.setAttribute("class", "tdbang");
 
-            td1.innerHTML = obj.cO2; td2.innerHTML = obj.soilMoisture; td3.innerHTML = obj.light_0x5C;
-            td4.innerHTML = obj.humidity//.slice(11, 16);
-            td5.innerHTML = obj.temperature; td2.innerHTML = obj.dateTime;
+            td1.innerHTML = Math.floor(obj.cO2); td2.innerHTML = Math.floor(obj.soilMoisture); td3.innerHTML = Math.floor(obj.light_0x5C); Math.floor();
+            td4.innerHTML = Math.floor(obj.humidity); //.slice(11, 16);
+            td5.innerHTML = Math.floor(obj.temperature); td6.innerHTML = Math.floor(obj.dateTime);
 
             const tr = document.createElement("tr");
             tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4); tr.appendChild(td5); tr.appendChild(td6);

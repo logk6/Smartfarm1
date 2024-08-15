@@ -64,10 +64,11 @@ namespace Smartfarm1.Controllers
             return new JsonResult(Ok(name));
         }
 
+
         [HttpPost]
-        public JsonResult Dkhien(string cm)
+        public JsonResult Dkhien(Req cm)
         {
-            if (cm == null) {
+            if (cm.mess == null) {
                 return new JsonResult("cm");
             }
 
@@ -78,7 +79,7 @@ namespace Smartfarm1.Controllers
             Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             sender.Connect(localEndPoint);
 
-            Req req = new Req { mess = cm };
+            Req req = cm;// new Req { mess = cm.mess };
             string reqstrg = JsonConvert.SerializeObject(req);
             byte[] messageSent = Encoding.ASCII.GetBytes(reqstrg);
             int byteSent = sender.Send(messageSent);
@@ -88,6 +89,34 @@ namespace Smartfarm1.Controllers
 
             return new JsonResult(Ok(cm));
         }
+
+        [HttpPost]
+        public JsonResult Chinhmau(Req cm)
+        {
+            if (cm == null)
+            {
+                return new JsonResult("cm");
+            }
+            /*
+            string ip = "172.31.98.24";
+            IPAddress ipAddr = IPAddress.Parse(ip);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
+
+            Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            sender.Connect(localEndPoint);
+
+            Req req = cm;// new Req { mess = cm.mess };
+            string reqstrg = JsonConvert.SerializeObject(req);
+            byte[] messageSent = Encoding.ASCII.GetBytes(reqstrg);
+            int byteSent = sender.Send(messageSent);
+            */
+            return new JsonResult(Ok(cm));
+        }
+
+
+
+
+
 
         [HttpGet]
         public JsonResult Sochchet()
