@@ -26,6 +26,15 @@ namespace Smartfarm1.Controllers
         public int rgb3 { get; set; }
     }
 
+    public class Check
+    {
+        public bool fancheck { get; set; }
+        public bool windowcheck { get; set; }
+        public int rgb1 { get; set; }
+        public int rgb2 { get; set; }
+        public int rgb3 { get; set; }
+    }
+
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -90,14 +99,10 @@ namespace Smartfarm1.Controllers
             return new JsonResult(Ok(cm));
         }
 
-        [HttpPost]
-        public JsonResult Chinhmau(Req cm)
+        [HttpGet]
+        public JsonResult Check()
         {
-            if (cm == null)
-            {
-                return new JsonResult("cm");
-            }
-            /*
+            /**/
             string ip = "172.31.98.24";
             IPAddress ipAddr = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
@@ -105,17 +110,24 @@ namespace Smartfarm1.Controllers
             Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             sender.Connect(localEndPoint);
 
-            Req req = cm;// new Req { mess = cm.mess };
+            Req req = new Req { mess = "check" };
             string reqstrg = JsonConvert.SerializeObject(req);
-            byte[] messageSent = Encoding.ASCII.GetBytes(reqstrg);
-            int byteSent = sender.Send(messageSent);
-            */
-            return new JsonResult(Ok(cm));
+            byte[] messSend = Encoding.ASCII.GetBytes(reqstrg);
+            sender.Send(messSend);
+
+            byte[] messageReceived = new byte[2048]; byte[] checkmess = new byte[1024];
+            int byteRecv = sender.Receive(messageReceived);
+            string strg = Encoding.ASCII.GetString(messageReceived).Replace("\0", string.Empty);
+
+            //var cate = JsonSerializer.Deserialize<FarmStatus>(strg);
+            var cate = JsonConvert.DeserializeObject<Check>(strg);
+
+
+            sender.Close();
+            
+
+            return new JsonResult(Ok(cate));
         }
-
-
-
-
 
 
         [HttpGet]
@@ -149,7 +161,7 @@ namespace Smartfarm1.Controllers
                 _db.SaveChanges();
             }*/
 
-            return new JsonResult(Ok(strg));
+            return new JsonResult(Ok(cate));
         }
 
 

@@ -37,7 +37,6 @@
 </style>
 
 
-
 ahihi dongoc
 <h1>Index Category</h1>
 
@@ -64,10 +63,10 @@ ahihi dongoc
                 //int i = ViewBag.ind;
                 <tr>
                     <td class="tdbang" width="10%">@obj.CO2.ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.SoilMoisture).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Light_0x5C).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Humidity).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Temperature).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.SoilMoisture, 1).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Light_0x5C, 1).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Humidity, 1).ToString()</td>
+                    <td class="tdbang" width="10%">@Math.Round((double)obj.Temperature, 1).ToString()</td>
                     <td class="tdbang" width="50%">@obj.DateTime.ToString()</td>
                 </tr>
 
@@ -77,7 +76,6 @@ ahihi dongoc
         </tbody>
     </table>
 </div>
-
 
 
 <p id="modl">a</p>
@@ -244,9 +242,10 @@ ahihi dongoc
                 dataType: "json",
                 
                 success: function (result) {
-                    /*console.log(result);
-                    document.getElementById("co2").innerHTML = result.value.cO2; document.getElementById("soilmois").innerHTML = result.value.soilMoisture; document.getElementById("ligh").innerHTML = result.value.light_0x5C;
-                    */document.getElementById("alet").innerHTML = result.value;
+                    console.log(result);
+                     /*document.getElementById("co2").innerHTML = result.value.cO2; document.getElementById("soilmois").innerHTML = result.value.soilMoisture; document.getElementById("ligh").innerHTML = result.value.light_0x5C;
+                    *///document.getElementById("alet").innerHTML = result.value;
+                   
 
                 },
                 error: function (req, status, error) {
@@ -383,7 +382,7 @@ ahihi dongoc
 
             td1.innerHTML = Math.floor(obj.cO2); td2.innerHTML = Math.floor(obj.soilMoisture); td3.innerHTML = Math.floor(obj.light_0x5C); Math.floor();
             td4.innerHTML = Math.floor(obj.humidity); //.slice(11, 16);
-            td5.innerHTML = Math.floor(obj.temperature); td6.innerHTML = Math.floor(obj.dateTime);
+            td5.innerHTML = Math.floor(obj.temperature); td6.innerHTML = obj.dateTime.toString();
 
             const tr = document.createElement("tr");
             tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4); tr.appendChild(td5); tr.appendChild(td6);
