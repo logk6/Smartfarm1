@@ -6,76 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/css/Contr.css" asp-append-version="true" />
 
-<style>
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 36px;
-        height: 20px;
-    }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 12px;
-            width: 12px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-    input:checked + .slider {
-        background-color: #2196F3;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(12px);
-        -ms-transform: translateX(12px);
-        transform: translateX(16px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 20px;
-    }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-    .visi1 {
-        visibility: visible;
-    }
-
-    .visi2 {
-        visibility: hidden;
-    }
-</style>
 
 <p>
     <label>Fan</label>
@@ -103,48 +35,66 @@
     </label>
     <input id="colorled" type="color" class="visi2" name="colour" />
 </p>
+<br />
 
+Recommended light colors for plants
 <table class="table table-bordered table-striped" style="width:50%;">
     <thead>
         <tr>
             <th width="10%"></th>
-            <th width="10%">Hue</th>
             <th width="10%">Hex</th>
-            <th width="10%">Rgb</th>
-            <th width="10%">Hsl</th>
-
+            <th width="15%">Rgb</th>
+            <th width="20%">Hsl</th>
         </tr>
     </thead>
-
     <tbody id="tbang">
-        <tr>
-            <td height="10px" width="10%" style="cursor:pointer;background-color:#ff0000"></td>
-            <td height="10px" width="10%">0</td>
-            <td height="10px" width="10%">#ff0000</td>
-            <td height="10px" width="10%">rgb(255, 0, 0)</td>
-            <td height="10px" width="10%">hsl(0, 100%, 50%)</td>
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:rgb(0, 0, 255)" onclick="bangmau('ledon', 0, 0, 255)"></td>
+            <td width="10%">#0000ff</td>
+            <td width="15%">rgb(0, 0, 255)</td>
+            <td width="20%">hsl(240, 100%, 50%)</td>
         </tr>
-        <tr>
-            <td height="10px" width="10%" style="cursor:pointer;background-color:rgb(255, 0, 255)"></td>
-            <td height="10px" width="10%">0</td>
-            <td height="10px" width="10%">#ff0000</td>
-            <td height="10px" width="10%">rgb(255, 0, 0)</td>
-            <td height="10px" width="10%">hsl(0, 100%, 50%)</td>
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:#ff0000" onclick="bangmau('ledon', 255, 0, 0)"></td>
+            <td width="10%">#ff0000</td>
+            <td width="15%">rgb(255, 0, 0)</td>
+            <td width="20%">hsl(0, 100%, 50%)</td>
         </tr>
-
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:rgb(0, 255, 0)" onclick="bangmau('ledon', 0, 255, 0)"></td>
+            <td width="10%">#00ff00</td>
+            <td width="15%">rgb(0, 255, 0)</td>
+            <td width="20%">hsl(120, 100%, 50%)</td>
+        </tr>
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 255)" onclick="bangmau('ledon', 255, 255, 255)"></td>
+            <td width="10%">#ffffff</td>
+            <td width="15%">rgb(255, 255, 255)</td>
+            <td width="20%">hsl(0, 0%, 100%)</td>
+        </tr>
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:rgb(128, 0, 128)" onclick="bangmau('ledon', 128, 0, 128)"></td>
+            <td width="10%">#800080</td>
+            <td width="15%">rgb(128, 0, 128)</td>
+            <td width="20%">hsl(300, 100%, 25%)</td>
+        </tr>
+        <tr height="10px">
+            <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 0)" onclick="bangmau('ledon', 255, 255, 0)"></td>
+            <td width="10%">#ffff00</td>
+            <td width="15%">rgb(255, 255, 0)</td>
+            <td width="20%">hsl(60, 100%, 50%)</td>
+        </tr>
     </tbody>
 </table>
 
 <input id="dkhien" type="text" placeholder="dkhien" />
-<button type="submit" onclick="dkhiencmd()">dieu khien</button>
-
-
+<button type="submit" onclick="dkhiencmd()">contrl</button>
+<p id="dkcmd"></p>
 
 <script>
     //const led = false;
     $(document).ready(function () {
         console.log("ready!");
-
 
         $.ajax({
             type: "GET",
@@ -153,11 +103,33 @@
 
             success: function (result) {
                 console.log(result);
+                /* */
+                if (result.value.fancheck == true) {
+                    document.getElementById("fan").checked = true;
+                }
+                else {
+                    document.getElementById("fan").checked = false;
+                }
+
+                if (result.value.windowcheck == true) {
+                    document.getElementById("window").checked = true;
+                }
+                else {
+                    document.getElementById("window").checked = false;
+                }
+
+                if (result.value.rgb1 == 0 && result.value.rgb2 == 0 && result.value.rgb3 == 0) {
+                    document.getElementById("led").checked = false;
+                }
+                else {
+                    document.getElementById("led").checked = true;
+                    document.getElementById("colorled").setAttribute("class", "visi1");
+                    //chinhmau("ledoff", 0, 0, 0);
+                }
 
             },
             error: function (req, status, error) {
                 console.log(status);
-               
             }
         });
     });
@@ -165,14 +137,14 @@
 </script>
 
 
-
 @section Scripts {
     <script>
         function dkhiencmd() {
-            console.log("wait");
+            console.log("wait"); document.getElementById("dkcmd").innerHTML = "wait";
+
             var dk = document.getElementById("dkhien").value;
-            let tex = '{"mess": "a"}'
-            const obj = JSON.parse(tex); obj.mess = dk;
+            let texx = '{"mess": "a"}'
+            const obj = JSON.parse(texx); obj.mess = dk;
             console.log(obj);
 
             $.ajax({
@@ -181,7 +153,25 @@
                 dataType: "json",
                 data: obj,//{ cm: 'fanoff'},
                 success: function (result) {
-                    console.log(result);
+                    //console.log(result);
+                    document.getElementById("dkcmd").innerHTML = "";
+                    if (dk == "fanon") {
+                        fan.checked = true;
+                    }
+                    else if (dk == "fanoff") {
+                        fan.checked = false;
+                    }
+                    else if (dk == "windopn") {
+                        document.getElementById('window').checked = true;
+                    }
+                    else if (dk == "windclos") {
+                        document.getElementById('window').checked = false;
+                    }
+                    else if (dk == "ledoff") {
+                        document.getElementById('led').checked = false;
+                        document.getElementById("colorled").setAttribute("class", "visi2");
+
+                    }
                 },
                 error: function (req, status, error) {
                     console.log(status)
@@ -191,9 +181,9 @@
 
         function dkhienbtn(cmd) {
             console.log("wait");
-            let tex = '{"mess": "a"}'
-            const obj = JSON.parse(tex); obj.mess = cmd;
-            //console.log(obj);
+            let texx = '{"mess": "a"}'
+            const obj = JSON.parse(texx); obj.mess = cmd;
+            console.log(obj);
 
             $.ajax({
                 type: "POST",
@@ -201,10 +191,26 @@
                 dataType: "json",
                 data: obj,//{ cm: 'fanoff'},
                 success: function (result) {
-                    console.log(result);
+                    //console.log(result);
                 },
                 error: function (req, status, error) {
                     console.log(status)
+                    if (cmd == "fanon") {
+                        fan.checked = false;
+                    }
+                    else if (cmd == "fanoff") {
+                        fan.checked = true;
+                    }
+                    else if (cmd == "windopn") {
+                        document.getElementById('window').checked = false;
+                    }
+                    else if (cmd == "windclos") {
+                        document.getElementById('window').checked = true;
+                    }
+                    else if (cmd  == "ledoff") {
+                        document.getElementById('led').checked = true;
+                    }
+
                 }
             });
         }
@@ -222,9 +228,32 @@
                 data: obj,//{ cm: 'fanoff'},
                 success: function (result) {
                     console.log(result);
+                   
                 },
                 error: function (req, status, error) {
                     console.log(status)
+                }
+            });
+        }
+
+        function bangmau(mess, r, g, b) {
+            console.log("wait");
+            let tex = '{"mess": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0}';
+            const obj = JSON.parse(tex);
+            obj.mess = mess; obj.rgb1 = r; obj.rgb2 = g; obj.rgb3 = b;
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                    document.getElementById('led').checked = true;
+                    document.getElementById("colorled").setAttribute("class", "visi1");
+                },
+                error: function (req, status, error) {
+                    console.log(status);
                 }
             });
         }

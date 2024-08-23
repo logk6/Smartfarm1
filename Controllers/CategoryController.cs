@@ -177,7 +177,7 @@ namespace Smartfarm1.Controllers
             {
                 va = obj;
             }
-
+            
             return new JsonResult(Ok(va));
         }
 

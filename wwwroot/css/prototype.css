@@ -1,0 +1,23 @@
+﻿.mycontainer {
+    display: flex;
+}
+
+.tdbang {
+    width: 10%;
+}
+
+.ex3 {
+    width: 100%;
+    height: 205px;
+    overflow: auto;
+}
+
+.sochet {
+    width: 320px;
+    border: 1px;
+    border-color: red;
+    border-style: groove;
+    position: absolute;
+    left: 1050px;
+    top: 50px;
+}
