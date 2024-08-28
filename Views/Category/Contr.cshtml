@@ -8,7 +8,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link rel="stylesheet" href="~/css/Contr.css" asp-append-version="true" />
 
-
 <p>
     <label>Fan</label>
     <label class="switch">
@@ -37,59 +36,88 @@
 </p>
 <br />
 
-Recommended light colors for plants
-<table class="table table-bordered table-striped" style="width:50%;">
-    <thead>
-        <tr>
-            <th width="10%"></th>
-            <th width="10%">Hex</th>
-            <th width="15%">Rgb</th>
-            <th width="20%">Hsl</th>
-        </tr>
-    </thead>
-    <tbody id="tbang">
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:rgb(0, 0, 255)" onclick="bangmau('ledon', 0, 0, 255)"></td>
-            <td width="10%">#0000ff</td>
-            <td width="15%">rgb(0, 0, 255)</td>
-            <td width="20%">hsl(240, 100%, 50%)</td>
-        </tr>
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:#ff0000" onclick="bangmau('ledon', 255, 0, 0)"></td>
-            <td width="10%">#ff0000</td>
-            <td width="15%">rgb(255, 0, 0)</td>
-            <td width="20%">hsl(0, 100%, 50%)</td>
-        </tr>
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:rgb(0, 255, 0)" onclick="bangmau('ledon', 0, 255, 0)"></td>
-            <td width="10%">#00ff00</td>
-            <td width="15%">rgb(0, 255, 0)</td>
-            <td width="20%">hsl(120, 100%, 50%)</td>
-        </tr>
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 255)" onclick="bangmau('ledon', 255, 255, 255)"></td>
-            <td width="10%">#ffffff</td>
-            <td width="15%">rgb(255, 255, 255)</td>
-            <td width="20%">hsl(0, 0%, 100%)</td>
-        </tr>
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:rgb(128, 0, 128)" onclick="bangmau('ledon', 128, 0, 128)"></td>
-            <td width="10%">#800080</td>
-            <td width="15%">rgb(128, 0, 128)</td>
-            <td width="20%">hsl(300, 100%, 25%)</td>
-        </tr>
-        <tr height="10px">
-            <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 0)" onclick="bangmau('ledon', 255, 255, 0)"></td>
-            <td width="10%">#ffff00</td>
-            <td width="15%">rgb(255, 255, 0)</td>
-            <td width="20%">hsl(60, 100%, 50%)</td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    Recommended light colors for plants
+    <table class="table table-bordered table-striped" style="width:50%;">
+        <thead>
+            <tr>
+                <th width="10%"></th>
+                <th width="10%">Hex</th>
+                <th width="15%">Rgb</th>
+                <th width="20%">Hsl</th>
+            </tr>
+        </thead>
+        <tbody id="tbang">
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:rgb(0, 0, 255)" onclick="bangmau('ledon', 0, 0, 255)"></td>
+                <td width="10%">#0000ff</td>
+                <td width="15%">rgb(0, 0, 255)</td>
+                <td width="20%">hsl(240, 100%, 50%)</td>
+            </tr>
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:#ff0000" onclick="bangmau('ledon', 255, 0, 0)"></td>
+                <td width="10%">#ff0000</td>
+                <td width="15%">rgb(255, 0, 0)</td>
+                <td width="20%">hsl(0, 100%, 50%)</td>
+            </tr>
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:rgb(0, 255, 0)" onclick="bangmau('ledon', 0, 255, 0)"></td>
+                <td width="10%">#00ff00</td>
+                <td width="15%">rgb(0, 255, 0)</td>
+                <td width="20%">hsl(120, 100%, 50%)</td>
+            </tr>
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 255)" onclick="bangmau('ledon', 255, 255, 255)"></td>
+                <td width="10%">#ffffff</td>
+                <td width="15%">rgb(255, 255, 255)</td>
+                <td width="20%">hsl(0, 0%, 100%)</td>
+            </tr>
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:rgb(128, 0, 128)" onclick="bangmau('ledon', 128, 0, 128)"></td>
+                <td width="10%">#800080</td>
+                <td width="15%">rgb(128, 0, 128)</td>
+                <td width="20%">hsl(300, 100%, 25%)</td>
+            </tr>
+            <tr height="10px">
+                <td width="10%" style="cursor:pointer;background-color:rgb(255, 255, 0)" onclick="bangmau('ledon', 255, 255, 0)"></td>
+                <td width="10%">#ffff00</td>
+                <td width="15%">rgb(255, 255, 0)</td>
+                <td width="20%">hsl(60, 100%, 50%)</td>
+            </tr>
+        </tbody>
+    </table>
 
-<input id="dkhien" type="text" placeholder="dkhien" />
-<button type="submit" onclick="dkhiencmd()">contrl</button>
-<p id="dkcmd"></p>
+    <input id="dkhien" type="text" placeholder="dkhien" />
+    <button type="submit" onclick="dkhiencmd()">contrl</button>
+    <p id="dkcmd"></p>
+
+    <div class="sochet">
+        <p style="text-align:center;">SoilCondition in present</p>
+        <div style="display: flex; position:sticky">
+
+            <div style="float: left; width: 50%; margin-left: 10px">
+                <p>CO2</p>
+                <p>SoilMoisture</p>
+                <p>Light</p>
+                <p>Humidity</p>
+                <p>Temperature</p>
+            </div>
+            <div style="float: left; width: 50%">
+                <p id="co2"></p>
+                <p id="soilmois"></p>
+                <p id="ligh"></p>
+                <p id="humi"></p>
+                <p id="temp"></p>
+            </div>
+
+        </div>
+        <button type="submit" onclick="sochchet()">get data at present</button>
+        <p id="alet"></p>
+    </div>
+
+</div>
+
+
 
 <script>
     //const led = false;
@@ -125,14 +153,29 @@ Recommended light colors for plants
                     document.getElementById("led").checked = true;
                     document.getElementById("colorled").setAttribute("class", "visi1");
                     //chinhmau("ledoff", 0, 0, 0);
+                    var hexColor1 = result.value.rgb1.toString(16); var hexColor2 = result.value.rgb2.toString(16); var hexColor3 = result.value.rgb3.toString(16);
+                    if (hexColor1.length == 1) {
+                        hexColor1 = "0" + hexColor1;
+                    }
+                    if (hexColor2.length == 1) {
+                        hexColor2 = "0" + hexColor2;
+                    }
+                    if (hexColor3.length == 1) {
+                        hexColor3 = "0" + hexColor3;
+                    }
+
+                    var hexColor = "#" + hexColor1 + hexColor2 + hexColor3;
+                    document.getElementById("colorled").value = hexColor;
                 }
 
             },
             error: function (req, status, error) {
                 console.log(status);
+                alert("No signal from farm");
             }
         });
     });
+
 
 </script>
 
@@ -207,7 +250,7 @@ Recommended light colors for plants
                     else if (cmd == "windclos") {
                         document.getElementById('window').checked = true;
                     }
-                    else if (cmd  == "ledoff") {
+                    else if (cmd == "ledoff") {
                         document.getElementById('led').checked = true;
                     }
 
@@ -228,7 +271,6 @@ Recommended light colors for plants
                 data: obj,//{ cm: 'fanoff'},
                 success: function (result) {
                     console.log(result);
-                   
                 },
                 error: function (req, status, error) {
                     console.log(status)
@@ -251,9 +293,49 @@ Recommended light colors for plants
                     console.log(result);
                     document.getElementById('led').checked = true;
                     document.getElementById("colorled").setAttribute("class", "visi1");
+
+                    var hexColor1 = r.toString(16); var hexColor2 = g.toString(16); var hexColor3 = b.toString(16);
+                    if (hexColor1.length == 1) {
+                        hexColor1 = "0" + hexColor1;
+                    }
+                    if (hexColor2.length == 1) {
+                        hexColor2 = "0" + hexColor2;
+                    }
+                    if (hexColor3.length == 1) {
+                        hexColor3 = "0" + hexColor3;
+                    }
+
+                    var hexColor = "#" + hexColor1 + hexColor2 + hexColor3;
+                    document.getElementById("colorled").value = hexColor;
+                    console.log(hexColor);
                 },
                 error: function (req, status, error) {
                     console.log(status);
+                }
+            });
+        }
+
+        async function sochchet() {
+            console.log("đợi tí");
+            document.getElementById("alet").innerHTML = "wait";
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Sochchet")",
+                dataType: "json",
+
+                success: function (result) {
+                    console.log(result);
+                    document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
+                    document.getElementById("ligh").innerHTML = result.value.light_0x5C.toString() + " lx";
+                    document.getElementById("humi").innerHTML = result.value.humidity.toString() + " %"; document.getElementById("temp").innerHTML = result.value.temperature.toString() + " ℃";
+                    /**///document.getElementById("alet").innerHTML = result.value;
+                    document.getElementById("alet").innerHTML = "";
+
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                    document.getElementById("alet").innerHTML = status;
                 }
             });
         }
@@ -299,8 +381,10 @@ Recommended light colors for plants
             if (led.checked) {
                 //dkhienbtn("windopn")
                 ledcolor.setAttribute("class", "visi1"); //setAttribute("class", "democlass");
-            } else {
+            }
+            else {
                 //dkhienbtn("windclos")
+                document.getElementById("colorled").value = "#000000"
                 ledcolor.setAttribute("class", "visi2");
                 chinhmau("ledoff", 0, 0, 0);
             }
@@ -308,3 +392,6 @@ Recommended light colors for plants
 
     </script>
 }
+
+
+

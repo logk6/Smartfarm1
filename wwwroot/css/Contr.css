@@ -65,3 +65,13 @@ input:checked + .slider:before {
 .visi2 {
     visibility: hidden;
 }
+
+.sochet {
+    width: 320px;
+    border: 1px;
+    border-color: red;
+    border-style: groove;
+    position: absolute;
+    left: 1200px;
+    top: 250px;
+}

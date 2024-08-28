@@ -123,9 +123,33 @@
 
 
 <script type="text/javascript">
-    var js = jQuery.noConflict(true);
-    js(document).ready(function () {
+    //var js = jQuery.noConflict(true);
+    //js(document).ready(function () {
 
+    //});
+
+    $(document).ready(function () {
+        console.log("ready!");
+        datachart();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Check")",
+            dataType: "json",
+
+            success: function (result) {
+                console.log(result);
+                
+                setTimeout(getnew, 60000);
+                /* */
+            },
+            error: function (req, status, error) {
+                console.log(status);
+                alert("No signal from farm");
+          
+                    //chinhmau("ledoff", 0, 0, 0);
+            }
+        });
     });
 </script>
 
@@ -149,8 +173,6 @@
         }
 
         var dade = 0;
-        datachart();
-
         let tex = '{ "cO2": 0, "dateTime": "2024-05-09T13:00:53", "id": 0, "light_0x5C": 0, "soilMoisture": 0, "temperature": 0, "humidity": 0}'
         const obj = JSON.parse(tex);
         async function getsth() {
@@ -336,8 +358,6 @@
                     }
                 }
             });
-            //getnew();
-            setTimeout(getnew, 60000);
         }
 
         function gigatabl() {
