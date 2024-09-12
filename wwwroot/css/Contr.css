@@ -72,6 +72,6 @@ input:checked + .slider:before {
     border-color: red;
     border-style: groove;
     position: absolute;
-    left: 1200px;
+    left: 1110px;
     top: 250px;
 }

@@ -27,6 +27,7 @@ namespace Smartfarm1.Controllers
     {
         public bool fancheck { get; set; }
         public bool windowcheck { get; set; }
+        public bool fanheatcheck { get; set; }
         public int rgb1 { get; set; }
         public int rgb2 { get; set; }
         public int rgb3 { get; set; }
@@ -118,7 +119,7 @@ namespace Smartfarm1.Controllers
 
             //var cate = JsonSerializer.Deserialize<FarmStatus>(strg);
             var cate = JsonConvert.DeserializeObject<Check>(strg);
-
+            
 
             sender.Close();
             

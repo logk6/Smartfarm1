@@ -27,6 +27,16 @@
 <br />
 
 <p>
+    <label>Heat fan</label>
+    <label class="switch">
+        <input id="heatfan" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+</p>
+<br />
+
+
+<p>
     <label>Led</label>
     <label class="switch">
         <input id="led" type="checkbox">
@@ -101,6 +111,7 @@
                 <p>Light</p>
                 <p>Humidity</p>
                 <p>Temperature</p>
+                <p>Time</p>
             </div>
             <div style="float: left; width: 50%">
                 <p id="co2"></p>
@@ -108,6 +119,7 @@
                 <p id="ligh"></p>
                 <p id="humi"></p>
                 <p id="temp"></p>
+                <p id="time"></p>
             </div>
 
         </div>
@@ -144,6 +156,13 @@
                 }
                 else {
                     document.getElementById("window").checked = false;
+                }
+
+                if (result.value.fanheatcheck == true) {
+                    document.getElementById("heatfan").checked = true;
+                }
+                else {
+                    document.getElementById("heatfan").checked = false;
                 }
 
                 if (result.value.rgb1 == 0 && result.value.rgb2 == 0 && result.value.rgb3 == 0) {
@@ -329,6 +348,7 @@
                     document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
                     document.getElementById("ligh").innerHTML = result.value.light_0x5C.toString() + " lx";
                     document.getElementById("humi").innerHTML = result.value.humidity.toString() + " %"; document.getElementById("temp").innerHTML = result.value.temperature.toString() + " ℃";
+                    
                     /**///document.getElementById("alet").innerHTML = result.value;
                     document.getElementById("alet").innerHTML = "";
 
@@ -358,6 +378,17 @@
                 //console.log("windowon");
             } else {
                 dkhienbtn("windclos")
+                //console.log("windowoff");
+            }
+        });
+
+        document.getElementById('heatfan').addEventListener('change', function () {
+            var window = document.getElementById('heatfan');
+            if (window.checked) {
+                dkhienbtn("fanheaton")
+                //console.log("windowon");
+            } else {
+                dkhienbtn("fanheatoff")
                 //console.log("windowoff");
             }
         });
