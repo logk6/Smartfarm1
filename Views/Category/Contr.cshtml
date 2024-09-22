@@ -35,7 +35,6 @@
 </p>
 <br />
 
-
 <p>
     <label>Led</label>
     <label class="switch">
@@ -348,7 +347,7 @@
                     document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
                     document.getElementById("ligh").innerHTML = result.value.light_0x5C.toString() + " lx";
                     document.getElementById("humi").innerHTML = result.value.humidity.toString() + " %"; document.getElementById("temp").innerHTML = result.value.temperature.toString() + " ℃";
-                    
+                    document.getElementById("time").innerHTML = result.value.dateTime.toString().slice(0, 19);
                     /**///document.getElementById("alet").innerHTML = result.value;
                     document.getElementById("alet").innerHTML = "";
 

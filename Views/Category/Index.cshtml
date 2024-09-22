@@ -96,6 +96,7 @@
                 <p>Light</p>
                 <p>Humidity</p>
                 <p>Temperature</p>
+                <p>Time</p>
             </div>
             <div style="float: left; width: 50%">
                 <p id="co2"></p>
@@ -103,6 +104,7 @@
                 <p id="ligh"></p>
                 <p id="humi"></p>
                 <p id="temp"></p>
+                <p id="time"></p>
             </div>
 
         </div>
@@ -237,7 +239,8 @@
                     document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
                     document.getElementById("ligh").innerHTML = result.value.light_0x5C.toString() + " lx";
                     document.getElementById("humi").innerHTML = result.value.humidity.toString() + " %"; document.getElementById("temp").innerHTML = result.value.temperature.toString() + " ℃";
-                     /**///document.getElementById("alet").innerHTML = result.value;
+                    document.getElementById("time").innerHTML = result.value.dateTime.toString().slice(0, 19);
+                    /**///document.getElementById("alet").innerHTML = result.value;
                     document.getElementById("alet").innerHTML = "";
 
                 },
