@@ -2,7 +2,7 @@
 
 namespace Smartfarm1.Models
 {
-    public class SmartfarmClass
+    public class Smartfarm
     {
         [Key]
         public int Id { get; set; }

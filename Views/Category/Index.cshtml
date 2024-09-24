@@ -1,121 +1,13 @@
 ﻿@using Smartfarm1.Models
 
-
 <!---->
 @model IEnumerable<FarmStatus>
-
 
 @{
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    
-</style>
-
-
-
-<h1>Index Category</h1>
-
-<div style="width:100%;">
-    <table id="bang" class="table table-bordered table-striped" style="width:100%;">
-        <thead>
-            <tr>
-                <th class="tdbang" width="10%">CO2</th>
-                <th class="tdbang" width="10%">SoilMoisture</th>
-                <th class="tdbang" width="10%">Light_0x5C</th>
-                <th class="tdbang" width="10%">Humidity</th>
-                <th class="tdbang" width="10%">Temperature</th>
-                <th class="tdbang" width="25%">DateTime</th>
-            </tr>
-        </thead>
-    </table>
-</div>
-
-<div style="width:100%; height:240px; overflow-y:auto; scrollbar-width: thin;">
-    <table id="bangbd" class="table table-bordered table-striped" style="width:100%;z-index: -1;">
-        <tbody id="tbang">
-            @foreach (var obj in Model)
-            {
-                //int i = ViewBag.ind;
-                <tr>
-                    <td class="tdbang" width="10%">@obj.CO2.ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.SoilMoisture, 1).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Light_0x5C, 1).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Humidity, 1).ToString()</td>
-                    <td class="tdbang" width="10%">@Math.Round((double)obj.Temperature, 1).ToString()</td>
-                    <td class="tdbang" width="50%">@obj.DateTime.ToString("yyyy-MM-ddTHH\\:mm\\:ss")</td>
-                </tr>
-
-                //ViewBag.modellast = obj;
-            }
-
-        </tbody>
-    </table>
-</div>
-
-<hr style="margin-left:34px; width:800px">
-<hr style="margin-left:34px; width:800px">
-
-<!--
-<table id="tbl" class="table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Display Order</th>
-            <th></th>
-            <th>Time</th>
-        </tr>
-    </thead>
-</table>
--->
-<hr style="margin-left:34px; width:800px">
-
-<h2>Chart</h2>
-<div style="position:relative">
-    <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
-    <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>
-    <hr style="margin-left:34px; width:800px">
-    <hr style="margin-left:34px; width:800px">
-    <canvas id="GigaChart2" style="width:100%;max-width:1000px"></canvas>
-
-    <hr style="margin-left:34px; width:800px">
-    <!--
-    <input id="dkhien" type="text" placeholder="dkhien" />
-    <button type="submit" onclick="dkhien()">dieu khien</button>
-    <button type="submit" onclick="getnew()">lấy hết</button>
-    -->
-    <div class="sochet">
-        <p style="text-align:center;">SoilCondition in present</p>
-        <div style="display: flex; position:sticky">
-
-            <div style="float: left; width: 50%; margin-left: 10px">
-                <p>CO2</p>
-                <p>SoilMoisture</p>
-                <p>Light</p>
-                <p>Humidity</p>
-                <p>Temperature</p>
-                <p>Time</p>
-            </div>
-            <div style="float: left; width: 50%">
-                <p id="co2"></p>
-                <p id="soilmois"></p>
-                <p id="ligh"></p>
-                <p id="humi"></p>
-                <p id="temp"></p>
-                <p id="time"></p>
-            </div>
-
-        </div>
-        <button type="submit" onclick="sochchet()">get data at present</button>
-        <p id="alet"></p>
-    </div>
-    <hr style="margin-left:34px; width:800px">
-</div>
-
-
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <!--<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
@@ -124,12 +16,187 @@
 <link rel="stylesheet" href="~/css/prototype.css" asp-append-version="true" />
 
 
+<h1>@ViewBag.farmgoname</h1>
+
+<input type="hidden" id="my-data" value="@ViewBag.farmgoIP" />
+<input type="hidden" id="my-id" value="@ViewBag.farmgoId" />
+
+<div class="d-flex" id="wrapper">
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">Control console</div>
+        <div class="list-group list-group-flush">
+            <p>
+                <label>Fan</label>
+                <label class="switch">
+                    <input id="fan" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </p> <br />
+            <p>
+                <label>Window</label>
+                <label class="switch">
+                    <input id="window" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </p> <br />
+            <p>
+                <label>Heat fan</label>
+                <label class="switch">
+                    <input id="heatfan" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </p> <br />
+            <p>
+                <label>Cool fan</label>
+                <label class="switch">
+                    <input id="coolfan" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </p> <br />
+            <p>
+                <label>Led</label>
+                <label class="switch">
+                    <input id="led" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <input id="colorled" type="color" class="visi2" name="colour" />
+            </p> <br />
+        </div>
+        
+        Recommend color
+        <table style="height:200px;width:240px">
+            <tr>
+                <td style="cursor:pointer;background-color:rgb(0, 0, 255)" onclick="bangmau('ledon', 0, 255, 0)"></td>
+                <td style="cursor:pointer;background-color:rgb(255, 0, 0)" onclick="bangmau('ledon', 255, 255, 255)"></td>
+            </tr>
+         
+            <tr>
+                <td style="cursor:pointer;background-color:rgb(0, 255, 0)" onclick="bangmau('ledon', 0, 255, 0)"></td>
+                <td style="cursor:pointer;background-color:rgb(255, 255, 255)" onclick="bangmau('ledon', 255, 255, 255)"></td>
+            </tr>
+          
+            <tr>
+                <td style="cursor:pointer;background-color:rgb(128, 0, 128)" onclick="bangmau('ledon', 128, 0, 128)"></td>
+                <td style="cursor:pointer;background-color:rgb(255, 255, 0)" onclick="bangmau('ledon', 255, 255, 0)"></td>
+            </tr>
+        </table>
+        <br />
+        <hr style="width:220px">
+        
+        <div class="sochet">
+            <p style="text-align:center;">SoilCondition in present</p>
+            <div style="display: flex">
+                <div style="float: left; width: 240px; margin-left: 10px">
+                    <p>CO2</p>
+                    <p>SoilMoisture</p>
+                    <p>Light</p>
+                    <p>Humidity</p>
+                    <p>Temperature</p>
+                    <p>Time</p>
+                </div>
+                <div style="float: left; width: 240px">
+                    <p id="co2"></p>
+                    <p id="soilmois"></p>
+                    <p id="ligh"></p>
+                    <p id="humi"></p>
+                    <p id="temp"></p>
+                    <p id="time"></p>
+                </div>
+            </div>
+            <button type="submit" onclick="sochchet()">get data at present</button>
+            <p id="alet"></p>
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#!">Action</a>
+                                <a class="dropdown-item" href="#!">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#!">Something else here</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div style="width:100%;">
+                <table id="bang" class="table table-bordered table-striped" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="tdbang" width="10%">CO2</th>
+                            <th class="tdbang" width="10%">SoilMoisture</th>
+                            <th class="tdbang" width="10%">Light_0x5C</th>
+                            <th class="tdbang" width="10%">Humidity</th>
+                            <th class="tdbang" width="10%">Temperature</th>
+                            <th class="tdbang" width="25%">DateTime</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div style="width:100%; height:240px; overflow-y:auto; scrollbar-width: thin;">
+                <table id="bangbd" class="table table-bordered table-striped" style="width:100%;z-index: -1;">
+                    <tbody id="tbang">
+                        @foreach (var obj in Model)
+                        {
+                            @if (obj.SFID == ViewBag.farmgoId)
+                            {
+                                <tr>
+                                    <td class="tdbang" width="10%">@obj.CO2.ToString()</td>
+                                    <td class="tdbang" width="10%">@Math.Round((double)obj.SoilMoisture, 1).ToString()</td>
+                                    <td class="tdbang" width="10%">@Math.Round((double)obj.Light_0x5C, 1).ToString()</td>
+                                    <td class="tdbang" width="10%">@Math.Round((double)obj.Humidity, 1).ToString()</td>
+                                    <td class="tdbang" width="10%">@Math.Round((double)obj.Temperature, 1).ToString()</td>
+                                    <td class="tdbang" width="50%">@obj.DateTime.ToString("yyyy-MM-ddTHH\\:mm\\:ss")</td>
+                                </tr>
+                                //ViewBag.modellast = obj;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <hr style="margin-left:34px; width:800px">
+            <hr style="margin-left:34px; width:800px">
+
+            <h2>Chart</h2>
+            <div style="position:relative">
+                <!--<img id="gigachart" src="@Url.Action("FarmChart", "Category")" alt="Chart" />-->
+                <canvas id="GigaChart" style="width:100%;max-width:1000px"></canvas>
+                <hr style="margin-left:34px; width:800px">
+                <hr style="margin-left:34px; width:800px">
+                <canvas id="GigaChart2" style="width:100%;max-width:1000px"></canvas>
+
+                <hr style="margin-left:34px; width:800px">
+            </div>
+            <hr style="margin-left:34px; width:800px">
+
+        </div>
+    </div>
+</div>
+
+<hr style="margin-left:34px; width:800px">
+
+
 <script type="text/javascript">
     //var js = jQuery.noConflict(true);
     //js(document).ready(function () {
 
     //});
-
+    /*
     $(document).ready(function () {
         console.log("ready!");
         datachart();
@@ -140,18 +207,87 @@
             dataType: "json",
             success: function (result) {
                 console.log(result);
-                
+
                 setTimeout(getnew, 60000);
-                /* */
+
+            },
+            error: function (req, status, error) {
+                console.log(status);
+                //alert("No signal from farm");
+
+                //chinhmau("ledoff", 0, 0, 0);
+            }
+        });
+    });*/
+</script>
+
+<script>
+    $(document).ready(function () {
+        console.log("ready!");
+        datachart();
+        let texx = '{"mess": "a", "ip": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0}'
+        const obj = JSON.parse(texx); obj.ip = document.getElementById("my-data").value;
+        console.log(obj);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Check")",
+            dataType: "json",
+            data: obj,
+            success: function (result) {
+                console.log(result);
+
+                if (result.value.fancheck == true) {
+                    document.getElementById("fan").checked = true;
+                }
+                else {
+                    document.getElementById("fan").checked = false;
+                }
+
+                if (result.value.windowcheck == true) {
+                    document.getElementById("window").checked = true;
+                }
+                else {
+                    document.getElementById("window").checked = false;
+                }
+
+                if (result.value.fanheatcheck == true) {
+                    document.getElementById("heatfan").checked = true;
+                }
+                else {
+                    document.getElementById("heatfan").checked = false;
+                }
+
+                if (result.value.rgb1 == 0 && result.value.rgb2 == 0 && result.value.rgb3 == 0) {
+                    document.getElementById("led").checked = false;
+                }
+                else {
+                    document.getElementById("led").checked = true;
+                    document.getElementById("colorled").setAttribute("class", "visi1");
+                    //chinhmau("ledoff", 0, 0, 0);
+                    var hexColor1 = result.value.rgb1.toString(16); var hexColor2 = result.value.rgb2.toString(16); var hexColor3 = result.value.rgb3.toString(16);
+                    if (hexColor1.length == 1) {
+                        hexColor1 = "0" + hexColor1;
+                    }
+                    if (hexColor2.length == 1) {
+                        hexColor2 = "0" + hexColor2;
+                    }
+                    if (hexColor3.length == 1) {
+                        hexColor3 = "0" + hexColor3;
+                    }
+
+                    var hexColor = "#" + hexColor1 + hexColor2 + hexColor3;
+                    document.getElementById("colorled").value = hexColor;
+                }
+
             },
             error: function (req, status, error) {
                 console.log(status);
                 alert("No signal from farm");
-          
-                    //chinhmau("ledoff", 0, 0, 0);
             }
         });
     });
+
 </script>
 
 
@@ -163,7 +299,7 @@
                 type: "POST",
                 url: "@Url.Action("Dkhien")",
                 dataType: "json",
-                data: {cm: dk},
+                data: { cm: dk },
                 success: function (result) {
                     console.log(result);
                 },
@@ -233,7 +369,7 @@
                 type: "GET",
                 url: "@Url.Action("Sochchet")",
                 dataType: "json",
-                
+
                 success: function (result) {
                     console.log(result);
                     document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
@@ -254,41 +390,47 @@
         const xValues = [];
         const yCO2 = []; const ysoilMoisture = []; const ylight_0x5C = []; const ytemp = []; const yhumi = [];
         function datachart() {
+            const id = document.getElementById("my-id").value;
+
             $.ajax({
                 type: "GET",
                 url: "@Url.Action("Gigachart")",
                 dataType: "json",
                 success: function (result) {
-                    //console.log(result);
+                    console.log(result.value);
                     if (result.value.length > 10) {
                         const dat = result.value.slice(result.value.length - 10, result.value.length);
 
                         for (var i = 0; i < dat.length; i++) {
-                            var strdate = dat[i].dateTime.toString();
-                            xValues.push(strdate.slice(11, 19));
+                            if (dat[i].sfid == id) {
+                                var strdate = dat[i].dateTime.toString();
+                                xValues.push(strdate.slice(11, 19));
 
-                            yCO2.push(dat[i].cO2);
-                            ysoilMoisture.push(dat[i].soilMoisture);
-                            ylight_0x5C.push(dat[i].light_0x5C);
-                            ytemp.push(dat[i].temperature);
-                            yhumi.push(dat[i].humidity);
+                                yCO2.push(dat[i].cO2);
+                                ysoilMoisture.push(dat[i].soilMoisture);
+                                ylight_0x5C.push(dat[i].light_0x5C);
+                                ytemp.push(dat[i].temperature);
+                                yhumi.push(dat[i].humidity);
+                            }
                         }
                     }
                     else {
                         for (var i = 0; i < result.value.length; i++) {
-                            var strdate = result.value[i].dateTime.toString();
-                            xValues.push(strdate.slice(11, 16));
+                            if (result.value[i].sfid == id) {
+                                var strdate = result.value[i].dateTime.toString();
+                                xValues.push(strdate.slice(11, 16));
 
-                            yCO2.push(result.value[i].cO2);
-                            ysoilMoisture.push(result.value[i].soilMoisture);
-                            ylight_0x5C.push(result.value[i].light_0x5C);
-                            ytemp.push(result.value[i].temperature);
-                            yhumi.push(result.value[i].humidity);
+                                yCO2.push(result.value[i].cO2);
+                                ysoilMoisture.push(result.value[i].soilMoisture);
+                                ylight_0x5C.push(result.value[i].light_0x5C);
+                                ytemp.push(result.value[i].temperature);
+                                yhumi.push(result.value[i].humidity);
+                            }
                         }
                     }
 
                     //js('#tbl').DataTable({
-                        //data: result
+                    //data: result
                     //});
                     console.log(xValues);
 
@@ -370,15 +512,241 @@
             td1.setAttribute("class", "tdbang"); td2.setAttribute("class", "tdbang"); td3.setAttribute("class", "tdbang");
             td4.setAttribute("class", "tdbang"); td5.setAttribute("class", "tdbang"); td6.setAttribute("class", "tdbang");
 
-            td1.innerHTML = Math.floor(obj.cO2*10)/10; td2.innerHTML = Math.floor(obj.soilMoisture*10)/10; td3.innerHTML = Math.floor(obj.light_0x5C*10)/10; 
-            td4.innerHTML = Math.floor(obj.humidity*10)/10; //.slice(11, 16);
-            td5.innerHTML = Math.floor(obj.temperature*10)/10; td6.innerHTML = obj.dateTime.toString().slice(0, 19);
+            td1.innerHTML = Math.floor(obj.cO2 * 10) / 10; td2.innerHTML = Math.floor(obj.soilMoisture * 10) / 10; td3.innerHTML = Math.floor(obj.light_0x5C * 10) / 10;
+            td4.innerHTML = Math.floor(obj.humidity * 10) / 10; //.slice(11, 16);
+            td5.innerHTML = Math.floor(obj.temperature * 10) / 10; td6.innerHTML = obj.dateTime.toString().slice(0, 19);
 
             const tr = document.createElement("tr");
             tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4); tr.appendChild(td5); tr.appendChild(td6);
             document.getElementById("tbang").appendChild(tr);
 
         }
+
+    </script>
+
+    <script>
+        function dkhiencmd() {
+            console.log("wait"); document.getElementById("dkcmd").innerHTML = "wait";
+
+            var dk = document.getElementById("dkhien").value;
+            let texx = '{"mess": "a"}'
+            const obj = JSON.parse(texx); obj.mess = dk;
+            console.log(obj);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    //console.log(result);
+                    document.getElementById("dkcmd").innerHTML = "";
+                    if (dk == "fanon") {
+                        fan.checked = true;
+                    }
+                    else if (dk == "fanoff") {
+                        fan.checked = false;
+                    }
+                    else if (dk == "windopn") {
+                        document.getElementById('window').checked = true;
+                    }
+                    else if (dk == "windclos") {
+                        document.getElementById('window').checked = false;
+                    }
+                    else if (dk == "ledoff") {
+                        document.getElementById('led').checked = false;
+                        document.getElementById("colorled").setAttribute("class", "visi2");
+
+                    }
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+        function dkhienbtn(cmd) {
+            console.log("wait");
+            let texx = '{"mess": "a", "ip": "a"}' //'{"mess": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0, }'
+            const obj = JSON.parse(texx); obj.mess = cmd; obj.ip = document.getElementById("my-data").value;
+            console.log(obj);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                    if (cmd == "fanon") {
+                        fan.checked = false;
+                    }
+                    else if (cmd == "fanoff") {
+                        fan.checked = true;
+                    }
+                    else if (cmd == "windopn") {
+                        document.getElementById('window').checked = false;
+                    }
+                    else if (cmd == "windclos") {
+                        document.getElementById('window').checked = true;
+                    }
+                    else if (cmd == "ledoff") {
+                        document.getElementById('led').checked = true;
+                    }
+
+                }
+            });
+        }
+
+        function chinhmau(mess, r, g, b) {
+            console.log("wait");
+            let tex = '{"mess": "ledon", "ip": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0}';
+            const obj = JSON.parse(tex);
+            obj.mess = mess; obj.rgb1 = r; obj.rgb2 = g; obj.rgb3 = b;
+            obj.ip = document.getElementById("my-data").value;
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });
+        }
+
+        function bangmau(mess, r, g, b) {
+            console.log("wait");
+            let tex = '{"mess": "a", "ip": "a", "rgb1": 0, "rgb2": 0, "rgb3": 0}';
+            const obj = JSON.parse(tex);
+            obj.mess = mess; obj.rgb1 = r; obj.rgb2 = g; obj.rgb3 = b;
+            obj.ip = document.getElementById("my-data").value;
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Dkhien")", //data: {cm: dk},
+                dataType: "json",
+                data: obj,//{ cm: 'fanoff'},
+                success: function (result) {
+                    console.log(result);
+                    document.getElementById('led').checked = true;
+                    document.getElementById("colorled").setAttribute("class", "visi1");
+
+                    var hexColor1 = r.toString(16); var hexColor2 = g.toString(16); var hexColor3 = b.toString(16);
+                    if (hexColor1.length == 1) {
+                        hexColor1 = "0" + hexColor1;
+                    }
+                    if (hexColor2.length == 1) {
+                        hexColor2 = "0" + hexColor2;
+                    }
+                    if (hexColor3.length == 1) {
+                        hexColor3 = "0" + hexColor3;
+                    }
+
+                    var hexColor = "#" + hexColor1 + hexColor2 + hexColor3;
+                    document.getElementById("colorled").value = hexColor;
+                    console.log(hexColor);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+        }
+
+        async function sochchet() {
+            console.log("đợi tí");
+            document.getElementById("alet").innerHTML = "wait";
+            ip = document.getElementById("my-data").value;
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Sochchet")",
+                dataType: "json",
+                data: ip,
+                success: function (result) {
+                    console.log(result);
+                    document.getElementById("co2").innerHTML = result.value.cO2.toString() + " mg/l"; document.getElementById("soilmois").innerHTML = result.value.soilMoisture.toString() + " g/m³";
+                    document.getElementById("ligh").innerHTML = result.value.light_0x5C.toString() + " lx";
+                    document.getElementById("humi").innerHTML = result.value.humidity.toString() + " %"; document.getElementById("temp").innerHTML = result.value.temperature.toString() + " ℃";
+                    document.getElementById("time").innerHTML = result.value.dateTime.toString().slice(0, 19);
+                    /**///document.getElementById("alet").innerHTML = result.value;
+                    document.getElementById("alet").innerHTML = "";
+
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                    document.getElementById("alet").innerHTML = status;
+                }
+            });
+        }
+
+        document.getElementById('fan').addEventListener('change', function () {
+            var fan = document.getElementById('fan');
+            if (fan.checked) {
+                dkhienbtn("fanon")
+                //console.log("fanon");
+            } else {
+                dkhienbtn("fanoff")
+                //console.log("fanoff");
+            }
+        });
+
+        document.getElementById('window').addEventListener('change', function () {
+            var window = document.getElementById('window');
+            if (window.checked) {
+                dkhienbtn("windopn")
+                //console.log("windowon");
+            } else {
+                dkhienbtn("windclos")
+                //console.log("windowoff");
+            }
+        });
+
+        document.getElementById('heatfan').addEventListener('change', function () {
+            var window = document.getElementById('heatfan');
+            if (window.checked) {
+                dkhienbtn("fanheaton")
+                //console.log("windowon");
+            } else {
+                dkhienbtn("fanheatoff")
+                //console.log("windowoff");
+            }
+        });
+
+        document.getElementById('colorled').addEventListener('change', function (event) {
+            var led = document.getElementById('colorled');
+            const color = event.target.value
+            const r = parseInt(color.substr(1, 2), 16)
+            const g = parseInt(color.substr(3, 2), 16)
+            const b = parseInt(color.substr(5, 2), 16)
+            //console.log(`red: ${r}, green: ${g}, blue: ${b}`)
+            chinhmau("ledon", r, g, b);
+            //console.log([r, g, b])
+
+        });
+
+        document.getElementById('led').addEventListener('change', function () {
+            var led = document.getElementById('led');
+            var ledcolor = document.getElementById("colorled");
+
+            if (led.checked) {
+                //dkhienbtn("windopn")
+                ledcolor.setAttribute("class", "visi1"); //setAttribute("class", "democlass");
+            }
+            else {
+                //dkhienbtn("windclos")
+                document.getElementById("colorled").value = "#000000"
+                ledcolor.setAttribute("class", "visi2");
+                chinhmau("ledoff", 0, 0, 0);
+            }
+        });
 
     </script>
 }

@@ -11,10 +11,20 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using System.Linq;
 
 
 namespace Smartfarm1.Controllers
 {
+    public class Contrl
+    {
+        public string mess { get; set; }
+        public string ip { get; set; }
+        public int rgb1 { get; set; }
+        public int rgb2 { get; set; }
+        public int rgb3 { get; set; }
+    }
+
     public class Req
     {
         public string mess { get; set; }
@@ -43,11 +53,13 @@ namespace Smartfarm1.Controllers
 
         public IActionResult Index()
         {
+            GetIdFromUrl();
+
             var date = DateOnly.FromDateTime(DateTime.Now);
             ViewBag.FormattedDate = date.ToString("d"); // Lưu vào ViewBag
             IEnumerable<FarmStatus> objCate = _db.FarmStatus;
             objCate = objCate.OrderBy(obj => obj.DateTime);
-           
+            //var obj = _db.FarmStatus;
             return View(objCate);
         }
 
@@ -56,7 +68,6 @@ namespace Smartfarm1.Controllers
             
             return View();
         }
-
 
         [HttpGet]
         public JsonResult GetName()
@@ -71,37 +82,60 @@ namespace Smartfarm1.Controllers
             return new JsonResult(Ok(name));
         }
 
+        [HttpGet()]
+        public IActionResult GetIdFromUrl()
+        {
+            int Id = int.Parse(HttpContext.Request.Query["id"]);
+            ViewBag.farmgoId = Id;
+      
+            IEnumerable<Smartfarm> objCate = _db.Smartfarm;
+            foreach (Smartfarm obj in objCate)
+            {
+                if(obj.Id == Id)
+                {
+                    ViewBag.farmgoName = obj.Name;
+                    ViewBag.farmgoIP = obj.IPAddress;
+                }
+            }
+
+            return Ok();
+        }
 
         [HttpPost]
-        public JsonResult Dkhien(Req cm)
+        public JsonResult Dkhien(Contrl cm)
         {
+            string ip = cm.ip; //"172.31.98.24"
+            
             if (cm.mess == null) {
                 return new JsonResult("cm");
             }
 
-            string ip = "172.31.98.24";
+            /**/
             IPAddress ipAddr = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
 
             Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             sender.Connect(localEndPoint);
 
-            Req req = cm;// new Req { mess = cm.mess };
+            Req req = new Req();
+           
+            req.mess = cm.mess; req.rgb2 = cm.rgb2; req.rgb3 = cm.rgb3; req.rgb1 = cm.rgb1;
+            //req.mess = "ledon"; req.rgb2 = 255; req.rgb3 = 0; req.rgb1 = 0;
+            
             string reqstrg = JsonConvert.SerializeObject(req);
             byte[] messageSent = Encoding.ASCII.GetBytes(reqstrg);
             int byteSent = sender.Send(messageSent);
             
+            sender.Close();/**/
 
-            sender.Close();
-
-            return new JsonResult(Ok(cm));
+            return new JsonResult(Ok(req));
         }
 
-        [HttpGet]
-        public JsonResult Check()
+        [HttpPost]
+        public JsonResult Check(Contrl cm)
         {
             /**/
-            string ip = "172.31.98.24";
+            string ip = cm.ip;//"172.31.98.24"; //
             IPAddress ipAddr = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
 
@@ -119,19 +153,16 @@ namespace Smartfarm1.Controllers
 
             //var cate = JsonSerializer.Deserialize<FarmStatus>(strg);
             var cate = JsonConvert.DeserializeObject<Check>(strg);
-            
 
             sender.Close();
-            
 
             return new JsonResult(Ok(cate));
         }
 
-
         [HttpGet]
-        public JsonResult Sochchet()
+        public JsonResult Sochchet(string ip)
         {//10.10.12.194 172.31.99.167
-            string ip = "172.31.98.24";
+            //string ip = "172.31.98.24";
             IPAddress ipAddr = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 40674);
 
@@ -149,7 +180,6 @@ namespace Smartfarm1.Controllers
 
             //var cate = JsonSerializer.Deserialize<FarmStatus>(strg);
             var cate = JsonConvert.DeserializeObject<FarmStatus>(strg);
-            
 
             sender.Close();
             /*
@@ -161,7 +191,6 @@ namespace Smartfarm1.Controllers
 
             return new JsonResult(Ok(cate));
         }
-
 
         [HttpGet]
         public JsonResult Getsth()
@@ -179,9 +208,8 @@ namespace Smartfarm1.Controllers
             return new JsonResult(Ok(va));
         }
 
-
         [HttpGet]
-        public JsonResult Gigachart()
+        public JsonResult Gigachart(string ip)
         {
             IEnumerable<FarmStatus> objCate = _db.FarmStatus;//pets.OrderBy(pet => pet.Age);
             objCate = objCate.OrderBy(obj => obj.DateTime);
@@ -190,7 +218,6 @@ namespace Smartfarm1.Controllers
             return new JsonResult(Ok(objCate));
 
         }
-
 
 
     }

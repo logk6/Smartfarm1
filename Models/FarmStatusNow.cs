@@ -2,11 +2,8 @@
 
 namespace Smartfarm1.Models
 {
-    public class FarmStatus
+    public class FarmStatusNow
     {
-        //
-        //public int Id { get; set; }
-        //
         [Key]
         public DateTime DateTime { get; set; }
         [Required]
@@ -16,6 +13,5 @@ namespace Smartfarm1.Models
         public int Light_0x5C { get; set; }
         public double Humidity { get; set; }
         public double Temperature { get; set; }
-
     }
 }

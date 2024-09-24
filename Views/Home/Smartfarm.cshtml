@@ -1,0 +1,115 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using Smartfarm1.Models
+@model IEnumerable<Smartfarm>
+
+
+@{
+    ViewData["Title"] = "Smartfarm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+
+</style>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<link rel="stylesheet" href="~/css/smartfarmlist.css" asp-append-version="true" />
+
+<table id="tbl" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr> 
+            <th>ID</th>
+            <th>Name</th>
+            <th>IPAddress</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr onclick="gotofarm(this)">
+                <td class="tdbang">@obj.Id</td>
+                <td class="tdbang">@obj.Name</td>
+                <td class="tdbang">@obj.IPAddress</td>
+                <td class="tdbang" style="cursor:pointer;background-color:rgb(102, 255, 51)"></td>
+                <td class="tdbang"></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-controller="Home" asp-action="AddSmartfarm" asp-route-returnUrl="" method="post">
+    <div class="container">
+        <label for="id"><b>ID</b></label> <br />
+        <input type="number" placeholder="Enter ID" name="id" required> <br />
+
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Enter Name" name="name" required>
+
+        <label for="ip"><b>IPAddress</b></label>
+        <input type="text" placeholder="Enter IPAddress" name="ip" required>
+
+        <button type="submit">Add</button>
+    </div>
+
+</form>
+
+<script>
+    function gotofarm(ifarm) {
+        //console.log("Row index is: " + ifarm.rowIndex);
+        //document.getElementById("tbl").rows[ifarm.rowIndex].cells[3].style.backgroundColor;
+        window.location.href = 'https://localhost:44307/Category' + "?id=" + document.getElementById("tbl").rows[ifarm.rowIndex].cells[0].innerHTML;
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        chec();
+    });
+
+    function chec() {
+        console.log("ready!");
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Check")",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+                for (var i = 0; i < result.value.length; i++) {
+                    
+                    if (result.value[i] == false) {
+                        document.getElementById("tbl").rows[i + 1].cells[3].style.backgroundColor = "#ff3300";
+                    }
+                    else {
+                        document.getElementById("tbl").rows[i + 1].cells[3].style.backgroundColor = "#66ff33";
+                    }
+                }
+
+                setTimeout(function () { chec() }, 60000);
+            },
+            error: function (req, status, error) {
+                console.log(status);
+                alert("No signal from server");
+            },
+        });
+    }
+
+
+    // setTimeout(function() { chec() }, 60000);
+    //setTimeout(getnew, 60000);
+
+
+    function log() {
+        console.log("log");
+    }
+</script>
+
+

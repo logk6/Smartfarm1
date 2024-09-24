@@ -7,16 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\Contr.js" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\prototype.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\js\Contr.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\js\Contr.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\smartfarmlist.css" />
   </ItemGroup>
 
   <ItemGroup>
